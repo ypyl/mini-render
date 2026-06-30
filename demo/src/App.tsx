@@ -227,7 +227,6 @@ function buildLargeSpec(itemCount: number): Spec {
 /**
  * Build a spec for the HTML table with `repeat`.
  * Seeding is idempotent — only writes if value is undefined.
- * ponytail: sets editingSection=true so BoundField is always editable in table view.
  */
 function buildTableSpec(itemCount: number): Spec {
   if (store.get("/items") === undefined) {
@@ -236,7 +235,6 @@ function buildTableSpec(itemCount: number): Spec {
       items.push({ name: `User ${i}`, email: `user${i}@example.com` });
     }
     store.set("/items", items);
-    store.set("/editingSection", true);
   }
 
   return {
@@ -245,7 +243,12 @@ function buildTableSpec(itemCount: number): Spec {
       table: {
         type: "Table",
         props: { title: `${itemCount}-Row HTML Table` },
-        children: ["headerRow", "tableBody"],
+        children: ["toggleBtn", "headerRow", "tableBody"],
+      },
+      toggleBtn: {
+        type: "ActionButton",
+        props: { label: "Edit" },
+        on: { click: { action: "toggleEdit" } },
       },
       headerRow: { type: "Tr", children: ["thName", "thEmail", "thActions"] },
       thName: { type: "Th", props: { text: "Name" } },
