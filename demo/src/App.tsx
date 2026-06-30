@@ -83,6 +83,45 @@ function Row({ children }: ComponentProps) {
   return <>{children}</>;
 }
 
+// ── Table components ─────────────────────────────────────────────
+
+function Table({ element, children }: ComponentProps) {
+  return (
+    <Paper shadow="sm" p="md" withBorder>
+      {element.props?.title ? (
+        <Title order={4} mb="xs">{String(element.props.title)}</Title>
+      ) : null}
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>{children}</table>
+    </Paper>
+  );
+}
+
+function THead({ children }: ComponentProps) {
+  return <thead>{children}</thead>;
+}
+
+function TBody({ children }: ComponentProps) {
+  return <tbody>{children}</tbody>;
+}
+
+function Tr({ children }: ComponentProps) {
+  return <tr>{children}</tr>;
+}
+
+function Th({ element }: ComponentProps) {
+  return (
+    <th style={{ textAlign: "left", padding: "8px", borderBottom: "2px solid #ddd" }}>
+      {String(element.props?.text ?? "")}
+    </th>
+  );
+}
+
+function Td({ children }: ComponentProps) {
+  return (
+    <td style={{ padding: "8px", borderBottom: "1px solid #eee" }}>{children}</td>
+  );
+}
+
 // ── Registry ──────────────────────────────────────────────────────
 
 const registry: Registry = {
@@ -91,6 +130,12 @@ const registry: Registry = {
   BoundField,
   ActionButton,
   Row,
+  Table,
+  THead,
+  TBody,
+  Tr,
+  Th,
+  Td,
 };
 
 // ── Global store (stable reference across tab switches) ────────────
@@ -179,6 +224,56 @@ function buildLargeSpec(itemCount: number): Spec {
   };
 }
 
+/**
+ * Build a spec for the HTML table with `repeat`.
+ * Seeding is idempotent — only writes if value is undefined.
+ * ponytail: sets editingSection=true so BoundField is always editable in table view.
+ */
+function buildTableSpec(itemCount: number): Spec {
+  if (store.get("/items") === undefined) {
+    const items: { name: string; email: string }[] = [];
+    for (let i = 0; i < itemCount; i++) {
+      items.push({ name: `User ${i}`, email: `user${i}@example.com` });
+    }
+    store.set("/items", items);
+    store.set("/editingSection", true);
+  }
+
+  return {
+    root: "table",
+    elements: {
+      table: {
+        type: "Table",
+        props: { title: `${itemCount}-Row HTML Table` },
+        children: ["headerRow", "tableBody"],
+      },
+      headerRow: { type: "Tr", children: ["thName", "thEmail", "thActions"] },
+      thName: { type: "Th", props: { text: "Name" } },
+      thEmail: { type: "Th", props: { text: "Email" } },
+      thActions: { type: "Th", props: { text: "Actions" } },
+      tableBody: {
+        type: "TBody",
+        repeat: { path: "/items" },
+        children: ["row"],
+      },
+      row: {
+        type: "Tr",
+        children: ["cellName", "cellEmail", "cellActions"],
+      },
+      cellName: { type: "Td", children: ["nameField"] },
+      cellEmail: { type: "Td", children: ["emailField"] },
+      cellActions: { type: "Td", children: ["deleteBtn"] },
+      nameField: { type: "BoundField", props: { bind: "name", label: "" } },
+      emailField: { type: "BoundField", props: { bind: "email", label: "" } },
+      deleteBtn: {
+        type: "ActionButton",
+        props: { label: "✕" },
+        on: { click: { action: "removeItem", params: { index: { $index: true } } } },
+      },
+    },
+  };
+}
+
 // ── Other specs ───────────────────────────────────────────────────
 
 const basicSpec: Spec = {
@@ -238,17 +333,19 @@ const actionSpec: Spec = {
 
 // ── App ───────────────────────────────────────────────────────────
 
-type Tab = "basic" | "form" | "actions" | "large";
+type Tab = "basic" | "form" | "actions" | "large" | "table";
 
 export function App() {
   const [tab, setTab] = useState<Tab>("form");
 
   const largeSpec = useMemo(() => buildLargeSpec(1000), []);
+  const tableSpec = useMemo(() => buildTableSpec(1000), []);
 
   const spec = tab === "basic" ? basicSpec
     : tab === "form" ? formSpec
     : tab === "actions" ? actionSpec
-    : largeSpec;
+    : tab === "large" ? largeSpec
+    : tableSpec;
 
   return (
     <Stack p="md" gap="md">
@@ -261,6 +358,7 @@ export function App() {
           { label: "Form", value: "form" },
           { label: "Actions", value: "actions" },
           { label: "Large (1000)", value: "large" },
+          { label: "Table", value: "table" },
         ]}
       />
       <Renderer spec={spec} registry={registry} store={store} handlers={handlers} />
