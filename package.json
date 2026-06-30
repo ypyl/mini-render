@@ -1,0 +1,20 @@
+{
+  "name": "mini-render",
+  "version": "0.1.0",
+  "description": "Minimal spec-driven React UI renderer with granular per-path subscriptions.",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "tsc -p tsconfig.test.json && node --test dist-test/store.test.js dist-test/actions.test.js"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "~6.0.2"
+  }
+}
