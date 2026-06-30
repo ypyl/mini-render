@@ -76,13 +76,22 @@ function createStore(initial: Record<string, unknown> = {}): Store {
 }
 
 // ── Inlined from src/hooks.ts ─────────────────────────────────────
-function resolveParams(params: Record<string, unknown>, getState: () => unknown): Record<string, unknown> {
+function resolveParams(params: Record<string, unknown>, getState: () => unknown, repeatBasePath?: string, repeatIndex?: number): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   for (const [key, val] of Object.entries(params)) {
-    if (val !== null && typeof val === "object" && !Array.isArray(val) && typeof (val as Record<string, unknown>).$state === "string") {
-      out[key] = getByPath(getState(), (val as { $state: string }).$state);
-    } else if (val !== null && typeof val === "object" && !Array.isArray(val)) {
-      out[key] = resolveParams(val as Record<string, unknown>, getState);
+    if (val !== null && typeof val === "object" && !Array.isArray(val)) {
+      const obj = val as Record<string, unknown>;
+      if (typeof obj.$state === "string") {
+        out[key] = getByPath(getState(), obj.$state);
+      } else if (typeof obj.$item === "string") {
+        out[key] = repeatBasePath
+          ? obj.$item === "" ? repeatBasePath : `${repeatBasePath}/${obj.$item}`
+          : undefined;
+      } else if ("$index" in obj) {
+        out[key] = obj.$index ? repeatIndex : undefined;
+      } else {
+        out[key] = resolveParams(obj, getState, repeatBasePath, repeatIndex);
+      }
     } else out[key] = val;
   }
   return out;
@@ -135,4 +144,37 @@ test("async handler writes after await (late setState)", async () => {
   };
   await handler({}, { getState: store.getState, setState: store.set });
   assert.equal(store.get("/saved"), true);
+});
+
+// ── $item / $index tests ──────────────────────────────────────────
+
+test("resolveParams: $item with field resolves to absolute path", () => {
+  const out = resolveParams({ itemPath: { $item: "name" } }, () => ({}), "/items/3");
+  assert.deepStrictEqual(out, { itemPath: "/items/3/name" });
+});
+
+test("resolveParams: $item with empty string resolves to base path", () => {
+  const out = resolveParams({ row: { $item: "" } }, () => ({}), "/items/7");
+  assert.deepStrictEqual(out, { row: "/items/7" });
+});
+
+test("resolveParams: $item outside repeat resolves to undefined", () => {
+  const out = resolveParams({ x: { $item: "name" } }, () => ({}));
+  assert.deepStrictEqual(out, { x: undefined });
+});
+
+test("resolveParams: $index inside repeat returns index", () => {
+  const out = resolveParams({ pos: { $index: true } }, () => ({}), "/items/3", 3);
+  assert.deepStrictEqual(out, { pos: 3 });
+});
+
+test("resolveParams: $index outside repeat returns undefined", () => {
+  const out = resolveParams({ pos: { $index: true } }, () => ({}));
+  assert.deepStrictEqual(out, { pos: undefined });
+});
+
+test("resolveParams: mixed $item and $state in same params", () => {
+  const getState = () => ({ user: { id: 42 } });
+  const out = resolveParams({ itemPath: { $item: "" }, userId: { $state: "/user/id" } }, getState, "/items/2");
+  assert.deepStrictEqual(out, { itemPath: "/items/2", userId: 42 });
 });

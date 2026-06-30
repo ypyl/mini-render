@@ -11,11 +11,9 @@ import {
   type ComponentType,
   memo,
   createElement,
-  createContext,
-  useContext,
 } from "react";
 import type { Spec, UIElement, OnMap, RepeatConfig } from "./spec";
-import { useValue, useEmit } from "./hooks";
+import { useValue, useEmit, RepeatPathContext, RepeatIndexContext } from "./hooks";
 import { StoreProvider, ActionProvider, BUILTIN_SET_STATE } from "./contexts";
 import type { Store } from "./store";
 import type { Handlers } from "./contexts";
@@ -136,7 +134,7 @@ function RepeatChildren({
         const basePath = `${repeat.path}/${index}`;
 
         return (
-          <RepeatScope key={key} path={basePath}>
+          <RepeatScope key={key} path={basePath} index={index}>
             {childKeys.map((childKey) => (
               <_ElementRenderer
                 key={childKey}
@@ -153,19 +151,16 @@ function RepeatChildren({
   );
 }
 
-// ── RepeatScope (lightweight context: just the base path) ────────────
+// ── RepeatScope (lightweight contexts: base path + index) ─────────
 
-const RepeatPathContext = createContext<string>("");
-
-function RepeatScope({ path, children }: { path: string; children: ReactNode }) {
+function RepeatScope({ path, index, children }: { path: string; index: number; children: ReactNode }) {
   return (
-    <RepeatPathContext.Provider value={path}>{children}</RepeatPathContext.Provider>
+    <RepeatPathContext.Provider value={path}>
+      <RepeatIndexContext.Provider value={index}>
+        {children}
+      </RepeatIndexContext.Provider>
+    </RepeatPathContext.Provider>
   );
-}
-
-/** Hook for descendant binding components to get parent repeat's base path. */
-export function useRepeatPath(): string {
-  return useContext(RepeatPathContext);
 }
 
 // ── Public Renderer ────────────────────────────────────────────────

@@ -9,6 +9,7 @@ import {
   useContext,
   useMemo,
   useSyncExternalStore,
+  createContext,
 } from "react";
 import {
   StoreContext,
@@ -17,6 +18,21 @@ import {
 } from "./contexts";
 import type { OnMap, ActionBinding } from "./spec";
 import { getByPath } from "./store";
+
+// ── Repeat scope contexts (used by renderer + hooks) ──────────────
+
+export const RepeatPathContext = createContext<string>("");
+export const RepeatIndexContext = createContext<number | undefined>(undefined);
+
+/** Hook for descendant components to get parent repeat's base path. */
+export function useRepeatPath(): string {
+  return useContext(RepeatPathContext);
+}
+
+/** Hook for descendant components to get parent repeat's numeric index. */
+export function useRepeatIndex(): number | undefined {
+  return useContext(RepeatIndexContext);
+}
 
 /** Return the stable store; throws if no provider. */
 export function useStore() {
@@ -65,30 +81,47 @@ export function useBound<T>(path: string): [T | undefined, (value: T) => void] {
   return [value, set];
 }
 
-/** Resolve `{ $state: "<path>" }` references in action params at dispatch time. Recurses into nested objects. */
+/** Resolve `{ $state: "<path>" }` references in action params at dispatch time. Recurses into nested objects.
+ * Also resolves `{ $item: "<field>" }` to `${basePath}/${field}` and `{ $index: boolean }` to the numeric index. */
 export function resolveParams(
   params: Record<string, unknown>,
   getState: () => unknown,
+  repeatBasePath?: string,
+  repeatIndex?: number,
 ): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   for (const [key, val] of Object.entries(params)) {
     if (
       val !== null &&
       typeof val === "object" &&
-      !Array.isArray(val) &&
-      typeof (val as Record<string, unknown>).$state === "string"
-    ) {
-      out[key] = getByPath(getState(), (val as { $state: string }).$state);
-    } else if (
-      val !== null &&
-      typeof val === "object" &&
       !Array.isArray(val)
     ) {
+      const obj = val as Record<string, unknown>;
+      // $state: read from store
+      if (typeof obj.$state === "string") {
+        out[key] = getByPath(getState(), obj.$state);
+      }
+      // $item: absolute state path from repeat scope
+      else if (typeof obj.$item === "string") {
+        out[key] = repeatBasePath
+          ? obj.$item === ""
+            ? repeatBasePath
+            : `${repeatBasePath}/${obj.$item}`
+          : undefined;
+      }
+      // $index: numeric repeat index
+      else if ("$index" in obj) {
+        out[key] = (obj.$index as boolean) ? repeatIndex : undefined;
+      }
       // Recurse into nested plain objects
-      out[key] = resolveParams(
-        val as Record<string, unknown>,
-        getState,
-      );
+      else {
+        out[key] = resolveParams(
+          obj,
+          getState,
+          repeatBasePath,
+          repeatIndex,
+        );
+      }
     } else {
       out[key] = val;
     }
@@ -107,6 +140,10 @@ export function useEmit(on?: OnMap): (event: string) => Promise<void> | void {
   if (!ctxRaw) throw new Error("useEmit must be used within an ActionProvider");
   const ctx: ActionContextValue = ctxRaw;
 
+  // Capture repeat scope at the element's position (static per element)
+  const repeatPath = useRepeatPath();
+  const repeatIdx = useRepeatIndex();
+
   return useMemo(() => {
     async function emit(eventName: string): Promise<void> {
       if (!on) return;
@@ -124,7 +161,7 @@ export function useEmit(on?: OnMap): (event: string) => Promise<void> | void {
           continue;
         }
         const resolved = b.params
-          ? resolveParams(b.params, ctx.getState)
+          ? resolveParams(b.params, ctx.getState, repeatPath, repeatIdx)
           : {};
         await handler(resolved, {
           getState: ctx.getState,
@@ -133,7 +170,28 @@ export function useEmit(on?: OnMap): (event: string) => Promise<void> | void {
       }
     }
     return emit;
-  }, [on, ctx]);
+  }, [on, ctx, repeatPath, repeatIdx]);
 }
 
 export type { ActionContextValue };
+
+/**
+ * Convenience hook for components to resolve `$item` expressions in props.
+ * String → passthrough. `{ $item: "<field>" }` → `${repeatPath}/${field}`.
+ * `{ $item: "" }` → repeatPath. Outside repeat → undefined.
+ */
+export function useItemPath(expr: unknown): string | undefined {
+  const base = useRepeatPath();
+  if (
+    expr !== null &&
+    typeof expr === "object" &&
+    !Array.isArray(expr) &&
+    typeof (expr as Record<string, unknown>).$item === "string"
+  ) {
+    const field = (expr as { $item: string }).$item;
+    if (!base) return undefined;
+    return field === "" ? base : `${base}/${field}`;
+  }
+  if (typeof expr === "string") return expr;
+  return undefined;
+}

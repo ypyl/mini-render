@@ -23,10 +23,9 @@ export {
   type StoreProviderProps,
   type ActionProviderProps,
 } from "./contexts";
-export { useStore, useValue, useSetValue, useBound, useEmit, resolveParams } from "./hooks";
+export { useStore, useValue, useSetValue, useBound, useEmit, resolveParams, useItemPath, useRepeatPath, useRepeatIndex } from "./hooks";
 export {
   Renderer,
-  useRepeatPath,
   type ComponentProps,
   type Registry,
   type RendererProps,

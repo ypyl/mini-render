@@ -113,6 +113,15 @@ const handlers = {
     const s = api.getState() as Record<string, unknown>;
     api.setState("/editingSection", !s.editingSection);
   },
+  removeItem: (
+    params: Record<string, unknown>,
+    api: { getState: () => unknown; setState: (p: string, v: unknown) => void },
+  ) => {
+    const idx = params.index as number;
+    const s = api.getState() as Record<string, unknown>;
+    const items = (s.items as unknown[] | undefined) ?? [];
+    api.setState("/items", items.filter((_, i) => i !== idx));
+  },
 };
 
 /**
@@ -151,7 +160,12 @@ function buildLargeSpec(itemCount: number): Spec {
       row: {
         type: "Row",
         props: {},
-        children: ["cellName", "cellEmail"],
+        children: ["deleteBtn", "cellName", "cellEmail"],
+      },
+      deleteBtn: {
+        type: "ActionButton",
+        props: { label: "✕" },
+        on: { click: { action: "removeItem", params: { index: { $index: true } } } },
       },
       cellName: {
         type: "BoundField",

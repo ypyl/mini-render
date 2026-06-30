@@ -118,7 +118,14 @@ const spec = {
 };
 ```
 
-The `emit("click")` closure is built per-element by the renderer, resolves `$state` params on-demand (read, not subscribe), and invokes the handler. Built-in `setState` action is always available: `{ action: "setState", params: { path: "/flag", value: true } }`.
+The `emit("click")` closure is built per-element by the renderer, resolves params on-demand (read, not subscribe), and invokes the handler. Action params support:
+
+- `{ $state: "/path" }` — reads the current value from the store
+- `{ $item: "field" }` — resolves to the absolute state path (e.g., `/items/5/field`)
+- `{ $item: "" }` — resolves to the repeat base path (e.g., `/items/5`)
+- `{ $index: true }` — resolves to the numeric repeat index
+
+Built-in `setState` action is always available: `{ action: "setState", params: { path: "/flag", value: true } }`.
 
 ### Repeat (arrays)
 
@@ -126,7 +133,10 @@ The `emit("click")` closure is built per-element by the renderer, resolves `$sta
 { "type": "Card", "repeat": { "path": "/items" }, "children": ["row"] }
 ```
 
-Renders `row` once per item in `/items`. Inside a repeat, components can use `useRepeatPath()` to get the current item's base path (`/items/0`, `/items/1`, etc.) and build field paths from it.
+Renders `row` once per item in `/items`. Inside a repeat, components can use:
+- `useRepeatPath()` — get the current item's base path (`/items/0`, `/items/1`, etc.)
+- `useRepeatIndex()` — get the numeric index (`0`, `1`, etc.)
+- `useItemPath(expr)` — resolve `{ $item: "field" }` to the full path
 
 ## API
 
@@ -149,6 +159,8 @@ Renders `row` once per item in `/items`. Inside a repeat, components can use `us
 | `useSetValue(path)` | `(v: unknown) => void` | Write-only setter for a path |
 | `useEmit(on?)` | `(event: string) => void` | Dispatch actions bound to an element's `on` map |
 | `useRepeatPath()` | `string` | Current repeat scope's base path |
+| `useRepeatIndex()` | `number \| undefined` | Current repeat scope's numeric index |
+| `useItemPath(expr)` | `string \| undefined` | Resolve `$item` expression or pass through string |
 
 ### Component contract (`ComponentProps`)
 
@@ -178,14 +190,14 @@ interface UIElement {
 
 interface ActionBinding {
   action: string;
-  params?: Record<string, unknown>;  // may contain { $state: "<path>" }
+  params?: Record<string, unknown>;  // $state, $item, $index expressions
 }
 ```
 
 ## Tests
 
 ```bash
-npm test   # 14 pure-logic tests (store + actions), zero framework deps
+npm test   # 20 pure-logic tests (store + actions), zero framework deps
 ```
 
 ## Demo
@@ -197,7 +209,7 @@ The demo app (`demo/`) has four tabs:
 | **Basic** | Static spec rendering |
 | **Form** | `BoundField` inputs with read-only/editable toggle |
 | **Actions** | `ActionButton` + handler writes timestamp to store |
-| **Large (1000)** | 1000-row × 2-column editable table via `repeat` — edit one cell, only that cell re-renders |
+| **Large (1000)** | 1000-row × 2-column editable table via `repeat` — edit one cell, only that cell re-renders. Per-row ✕ delete using `{ $index: true }`. |
 
 ## vs json-render
 
@@ -207,7 +219,8 @@ The demo app (`demo/`) has four tabs:
 | AI streaming (JSONL patches) | ✓ | ✗ |
 | Zod catalog validation | ✓ | ✗ |
 | Directives (`$format`, `$math`) | ✓ | ✗ |
+| `$item` / `$index` in action params | ✓ | ✓ |
 | Devtools | ✓ | ✗ |
 | Vue/Svelte/Solid | ✓ | ✗ |
 | Runtime deps | React + Zod | React only |
-| LOC (core) | ~3,000 | ~400 |
+| LOC (core) | ~3,000 | ~450 |
