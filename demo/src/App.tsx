@@ -78,6 +78,20 @@ function ActionButton({ element, emit }: ComponentProps) {
   );
 }
 
+/** EditToggle: shows [Edit] in view mode, [Save] [Cancel] in edit mode. */
+function EditToggle({ emit }: ComponentProps) {
+  const editing = useValue<boolean>("/editingSection");
+  if (!editing) {
+    return <MantineButton onClick={() => emit("edit")}>Edit</MantineButton>;
+  }
+  return (
+    <div style={{ display: "flex", gap: 8 }}>
+      <MantineButton onClick={() => emit("save")}>Save</MantineButton>
+      <MantineButton variant="outline" onClick={() => emit("cancel")}>Cancel</MantineButton>
+    </div>
+  );
+}
+
 /** Transparent row wrapper for repeat children; renders children directly. */
 function Row({ children }: ComponentProps) {
   return <>{children}</>;
@@ -136,6 +150,7 @@ const registry: Registry = {
   Tr,
   Th,
   Td,
+  EditToggle,
 };
 
 // ── Global store (stable reference across tab switches) ────────────
@@ -151,12 +166,34 @@ const handlers = {
   ) => {
     api.setState("/savedAt", new Date().toISOString());
   },
-  toggleEdit: (
+  startEdit: (
+    _params: Record<string, unknown>,
+    api: { getState: () => unknown; setState: (p: string, v: unknown) => void },
+  ) => {
+    api.setState("/_snapshot", structuredClone(api.getState()));
+    api.setState("/editingSection", true);
+  },
+  saveEdit: (
+    _params: Record<string, unknown>,
+    api: { setState: (p: string, v: unknown) => void },
+  ) => {
+    api.setState("/_snapshot", undefined);
+    api.setState("/editingSection", false);
+  },
+  cancelEdit: (
     _params: Record<string, unknown>,
     api: { getState: () => unknown; setState: (p: string, v: unknown) => void },
   ) => {
     const s = api.getState() as Record<string, unknown>;
-    api.setState("/editingSection", !s.editingSection);
+    const snap = (s._snapshot as Record<string, unknown>) ?? {};
+    // ponytail: union of snapshot + current keys so newly-created fields reset to undefined
+    const snapKeys = Object.keys(snap);
+    const currentKeys = Object.keys(s).filter(k => k !== "_snapshot" && k !== "editingSection");
+    for (const key of [...new Set([...snapKeys, ...currentKeys])]) {
+      api.setState(`/${key}`, snap[key]);
+    }
+    api.setState("/_snapshot", undefined);
+    api.setState("/editingSection", false);
   },
   removeItem: (
     params: Record<string, unknown>,
@@ -192,9 +229,8 @@ function buildLargeSpec(itemCount: number): Spec {
         children: ["toggleBtn", "list"],
       },
       toggleBtn: {
-        type: "ActionButton",
-        props: { label: "Edit" },
-        on: { click: { action: "toggleEdit" } },
+        type: "EditToggle",
+        on: { edit: { action: "startEdit" }, save: { action: "saveEdit" }, cancel: { action: "cancelEdit" } },
       },
       list: {
         type: "Card",
@@ -246,9 +282,8 @@ function buildTableSpec(itemCount: number): Spec {
         children: ["toggleBtn", "headerRow", "tableBody"],
       },
       toggleBtn: {
-        type: "ActionButton",
-        props: { label: "Edit" },
-        on: { click: { action: "toggleEdit" } },
+        type: "EditToggle",
+        on: { edit: { action: "startEdit" }, save: { action: "saveEdit" }, cancel: { action: "cancelEdit" } },
       },
       headerRow: { type: "Tr", children: ["thName", "thEmail", "thActions"] },
       thName: { type: "Th", props: { text: "Name" } },
@@ -300,9 +335,8 @@ const formSpec: Spec = {
       children: ["toggleBtn", "name", "email"],
     },
     toggleBtn: {
-      type: "ActionButton",
-      props: { label: "Edit" },
-      on: { click: { action: "toggleEdit" } },
+      type: "EditToggle",
+      on: { edit: { action: "startEdit" }, save: { action: "saveEdit" }, cancel: { action: "cancelEdit" } },
     },
     name: { type: "BoundField", props: { bind: "name", label: "Name" } },
     email: { type: "BoundField", props: { bind: "email", label: "Email" } },
@@ -318,9 +352,8 @@ const actionSpec: Spec = {
       children: ["toggleBtn", "btn", "status"],
     },
     toggleBtn: {
-      type: "ActionButton",
-      props: { label: "Edit" },
-      on: { click: { action: "toggleEdit" } },
+      type: "EditToggle",
+      on: { edit: { action: "startEdit" }, save: { action: "saveEdit" }, cancel: { action: "cancelEdit" } },
     },
     btn: {
       type: "ActionButton",
