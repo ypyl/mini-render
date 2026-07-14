@@ -226,4 +226,40 @@ describe("RepeatChildren", () => {
     // 1 list + 2 rows = 3 renders (no crash despite missing key field)
     expect(Spy.called).toHaveLength(3);
   });
+
+  it("handles repeat with no children defined", () => {
+    const store = createStore({ items: [{ name: "A" }] });
+    const Spy = makeSpy();
+    const registry: Registry = { Spy };
+    // repeat config without children property
+    const spec: Spec = {
+      root: "list",
+      elements: {
+        list: { type: "Spy", repeat: { path: "/items" } },
+      },
+    };
+
+    render(<Renderer spec={spec} registry={registry} store={store} />);
+
+    // The list element renders; no children to repeat
+    expect(Spy.called).toHaveLength(1);
+  });
+
+  it("handles repeat on missing store path", () => {
+    const store = createStore({});
+    const Spy = makeSpy();
+    const registry: Registry = { Spy };
+    const spec: Spec = {
+      root: "list",
+      elements: {
+        list: { type: "Spy", repeat: { path: "/nonexistent" }, children: ["row"] },
+        row: { type: "Spy" },
+      },
+    };
+
+    render(<Renderer spec={spec} registry={registry} store={store} />);
+
+    // Only the list, no rows since path is missing
+    expect(Spy.called).toHaveLength(1);
+  });
 });

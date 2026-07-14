@@ -82,3 +82,11 @@ describe("ActionProvider", () => {
     expect(getByTestId("actions").textContent).toBe("");
   });
 });
+
+describe("BUILTIN_SET_STATE", () => {
+  it("does nothing when path is undefined", () => {
+    const store = createStore({ x: 1 });
+    BUILTIN_SET_STATE({ path: undefined, value: 99 }, { getState: store.getState, setState: store.set });
+    expect(store.get("/x")).toBe(1);
+  });
+});

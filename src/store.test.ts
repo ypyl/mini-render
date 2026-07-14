@@ -130,3 +130,43 @@ describe("set", () => {
     expect(calls).toBe(1);
   });
 });
+
+describe("immutableSetByPath edge cases", () => {
+  it("handles array root", () => {
+    const next = immutableSetByPath(["a", "b"], "/0", "X") as unknown[];
+    expect(next).toEqual(["X", "b"]);
+  });
+
+  it("handles primitive number root", () => {
+    const next = immutableSetByPath(42, "/x", 1) as Record<string, unknown>;
+    expect(getByPath(next, "/x")).toBe(1);
+  });
+
+  it("handles undefined root", () => {
+    const next = immutableSetByPath(undefined, "/x", 1) as Record<string, unknown>;
+    expect(getByPath(next, "/x")).toBe(1);
+  });
+
+  it("handles boolean root", () => {
+    const next = immutableSetByPath(false, "/x", 1) as Record<string, unknown>;
+    expect(getByPath(next, "/x")).toBe(1);
+  });
+
+  it("empty path replaces entire root", () => {
+    const next = immutableSetByPath({ x: 1 }, "", 42);
+    expect(next).toBe(42);
+  });
+});
+
+describe("unsubscribe edge cases", () => {
+  it("does not remove path entry when other listeners remain", () => {
+    const store = createStore({ x: 1 });
+    let a = 0, b = 0;
+    const unsubA = store.subscribe("/x", () => a++);
+    store.subscribe("/x", () => b++);
+    unsubA();
+    store.set("/x", 2);
+    expect(a).toBe(0);
+    expect(b).toBe(1);
+  });
+});

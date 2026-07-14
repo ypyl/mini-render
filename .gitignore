@@ -5,3 +5,4 @@ dist-test/
 *.log
 .pi/
 coverage/
+coverage-html/
