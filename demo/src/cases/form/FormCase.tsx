@@ -1,6 +1,6 @@
 // FormCase.tsx — bound editable fields demo.
 import { Renderer } from "mini-render";
-import formSpec from "../../specs/form.json";
+import formSpec from "./spec.json";
 import { store } from "../../store";
 import { handlers } from "../../handlers";
 import { registry } from "./registry";

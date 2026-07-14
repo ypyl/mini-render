@@ -1,6 +1,6 @@
 // BasicCase.tsx — static spec rendering demo.
 import { Renderer } from "mini-render";
-import basicSpec from "../../specs/basic.json";
+import basicSpec from "./spec.json";
 import { store } from "../../store";
 import { handlers } from "../../handlers";
 import { registry } from "./registry";

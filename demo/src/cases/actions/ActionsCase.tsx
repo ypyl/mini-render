@@ -1,6 +1,6 @@
 // ActionsCase.tsx — action dispatch demo.
 import { Renderer } from "mini-render";
-import actionSpec from "../../specs/actions.json";
+import actionSpec from "./spec.json";
 import { store } from "../../store";
 import { handlers } from "../../handlers";
 import { registry } from "./registry";
