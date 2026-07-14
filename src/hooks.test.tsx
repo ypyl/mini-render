@@ -1,0 +1,311 @@
+// hooks.test.tsx — tests for all exported hooks.
+import { describe, it, expect, vi } from "vitest";
+import { renderHook, act } from "@testing-library/react";
+import { useStore, useValue, useSetValue, useBound, useEmit, useItemPath, useRepeatPath, useRepeatIndex } from "./hooks";
+import { createStore } from "./store";
+import { createWrapper } from "./test-utils";
+
+// ── useStore ──────────────────────────────────────────────────────
+
+describe("useStore", () => {
+  it("returns the store from context", () => {
+    const store = createStore({ x: 1 });
+    const { result } = renderHook(() => useStore(), {
+      wrapper: createWrapper({ store }),
+    });
+    expect(result.current).toBe(store);
+  });
+
+  it("throws when used outside StoreProvider", () => {
+    expect(() => renderHook(() => useStore())).toThrow(
+      "useStore must be used within a StoreProvider",
+    );
+  });
+});
+
+// ── useValue ──────────────────────────────────────────────────────
+
+describe("useValue", () => {
+  it("reads the current value at a path", () => {
+    const store = createStore({ x: 42 });
+    const { result } = renderHook(() => useValue<number>("/x"), {
+      wrapper: createWrapper({ store }),
+    });
+    expect(result.current).toBe(42);
+  });
+
+  it("returns undefined for missing path", () => {
+    const store = createStore({});
+    const { result } = renderHook(() => useValue("/missing"), {
+      wrapper: createWrapper({ store }),
+    });
+    expect(result.current).toBeUndefined();
+  });
+
+  it("reacts to store set at the subscribed path", () => {
+    const store = createStore({ x: 1 });
+    const { result, rerender } = renderHook(() => useValue<number>("/x"), {
+      wrapper: createWrapper({ store }),
+    });
+    expect(result.current).toBe(1);
+
+    act(() => { store.set("/x", 99); });
+    rerender();
+    expect(result.current).toBe(99);
+  });
+
+  it("does NOT react to unrelated path changes", () => {
+    const store = createStore({ x: 1, y: 2 });
+    const { result, rerender } = renderHook(() => useValue<number>("/x"), {
+      wrapper: createWrapper({ store }),
+    });
+    const snapshot = result.current;
+
+    act(() => { store.set("/y", 999); });
+    rerender();
+    expect(result.current).toBe(snapshot);
+  });
+});
+
+// ── useSetValue ────────────────────────────────────────────────────
+
+describe("useSetValue", () => {
+  it("returns a stable setter that writes to the store", () => {
+    const store = createStore({ x: 1 });
+    const { result, rerender } = renderHook(() => useSetValue("/x"), {
+      wrapper: createWrapper({ store }),
+    });
+
+    const setterBefore = result.current;
+    act(() => { result.current(99); });
+    rerender();
+    const setterAfter = result.current;
+
+    expect(store.get("/x")).toBe(99);
+    // setter should be stable (same reference)
+    expect(setterBefore).toBe(setterAfter);
+  });
+});
+
+// ── useBound ───────────────────────────────────────────────────────
+
+describe("useBound", () => {
+  it("returns [value, setter] tuple", () => {
+    const store = createStore({ name: "Alice" });
+    const { result } = renderHook(() => useBound<string>("/name"), {
+      wrapper: createWrapper({ store }),
+    });
+
+    const [value, setter] = result.current;
+    expect(value).toBe("Alice");
+    expect(typeof setter).toBe("function");
+  });
+
+  it("setter updates the store and value", () => {
+    const store = createStore({ name: "Alice" });
+    const { result, rerender } = renderHook(() => useBound<string>("/name"), {
+      wrapper: createWrapper({ store }),
+    });
+
+    act(() => { result.current[1]("Bob"); });
+    rerender();
+
+    expect(result.current[0]).toBe("Bob");
+    expect(store.get("/name")).toBe("Bob");
+  });
+});
+
+// ── useRepeatPath / useRepeatIndex ─────────────────────────────────
+
+describe("useRepeatPath", () => {
+  it("returns empty string by default", () => {
+    const { result } = renderHook(() => useRepeatPath(), {
+      wrapper: createWrapper(),
+    });
+    expect(result.current).toBe("");
+  });
+
+  it("returns the repeat path from context", () => {
+    const { result } = renderHook(() => useRepeatPath(), {
+      wrapper: createWrapper({ repeatPath: "/items/3" }),
+    });
+    expect(result.current).toBe("/items/3");
+  });
+});
+
+describe("useRepeatIndex", () => {
+  it("returns undefined by default", () => {
+    const { result } = renderHook(() => useRepeatIndex(), {
+      wrapper: createWrapper(),
+    });
+    expect(result.current).toBeUndefined();
+  });
+
+  it("returns the repeat index from context", () => {
+    const { result } = renderHook(() => useRepeatIndex(), {
+      wrapper: createWrapper({ repeatIndex: 7 }),
+    });
+    expect(result.current).toBe(7);
+  });
+});
+
+// ── useItemPath ────────────────────────────────────────────────────
+
+describe("useItemPath", () => {
+  it("resolves $item with field to absolute path", () => {
+    const { result } = renderHook(() => useItemPath({ $item: "name" }), {
+      wrapper: createWrapper({ repeatPath: "/items/5" }),
+    });
+    expect(result.current).toBe("/items/5/name");
+  });
+
+  it("resolves $item with empty string to base path", () => {
+    const { result } = renderHook(() => useItemPath({ $item: "" }), {
+      wrapper: createWrapper({ repeatPath: "/items/5" }),
+    });
+    expect(result.current).toBe("/items/5");
+  });
+
+  it("returns undefined for $item outside repeat scope", () => {
+    const { result } = renderHook(() => useItemPath({ $item: "name" }), {
+      wrapper: createWrapper(),
+    });
+    expect(result.current).toBeUndefined();
+  });
+
+  it("passes through plain strings", () => {
+    const { result } = renderHook(() => useItemPath("/foo/bar"), {
+      wrapper: createWrapper(),
+    });
+    expect(result.current).toBe("/foo/bar");
+  });
+
+  it("returns undefined for non-string, non-$item", () => {
+    const { result } = renderHook(() => useItemPath(42), {
+      wrapper: createWrapper(),
+    });
+    expect(result.current).toBeUndefined();
+  });
+});
+
+// ── useEmit ────────────────────────────────────────────────────────
+
+describe("useEmit", () => {
+  it("returns a function", () => {
+    const { result } = renderHook(() => useEmit(), {
+      wrapper: createWrapper(),
+    });
+    expect(typeof result.current).toBe("function");
+  });
+
+  it("returns a no-op function that resolves undefined", async () => {
+    const { result } = renderHook(() => useEmit(), {
+      wrapper: createWrapper(),
+    });
+    // Calling emit with no on map should be a no-op (resolves undefined)
+    await expect(result.current("click")).resolves.toBeUndefined();
+  });
+
+  it("dispatches action and calls handler with resolved params", async () => {
+    const store = createStore({ doc: { id: 42 } });
+    const handler = vi.fn();
+    const handlers = { myAction: handler };
+    const on = { click: { action: "myAction", params: { docId: { $state: "/doc/id" } } } };
+
+    const { result } = renderHook(() => useEmit(on), {
+      wrapper: createWrapper({ store, handlers }),
+    });
+
+    await act(async () => {
+      await result.current("click");
+    });
+
+    expect(handler).toHaveBeenCalledTimes(1);
+    expect(handler).toHaveBeenCalledWith(
+      { docId: 42 },
+      { getState: store.getState, setState: store.set },
+    );
+  });
+
+  it("warns when handler is not registered", async () => {
+    const store = createStore();
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const on = { click: { action: "noSuchHandler" } };
+
+    const { result } = renderHook(() => useEmit(on), {
+      wrapper: createWrapper({ store }),
+    });
+
+    await act(async () => {
+      await result.current("click");
+    });
+
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('no handler registered for "noSuchHandler"'),
+    );
+    warn.mockRestore();
+  });
+
+  it("supports multiple bindings for the same event", async () => {
+    const store = createStore();
+    const h1 = vi.fn();
+    const h2 = vi.fn();
+    const handlers = { a: h1, b: h2 };
+    const on = { click: [{ action: "a" }, { action: "b" }] };
+
+    const { result } = renderHook(() => useEmit(on), {
+      wrapper: createWrapper({ store, handlers }),
+    });
+
+    await act(async () => {
+      await result.current("click");
+    });
+
+    expect(h1).toHaveBeenCalledTimes(1);
+    expect(h2).toHaveBeenCalledTimes(1);
+  });
+
+  it("emits nothing for unknown event name", async () => {
+    const handler = vi.fn();
+    const handlers = { a: handler };
+    const on = { click: { action: "a" } };
+
+    const { result } = renderHook(() => useEmit(on), {
+      wrapper: createWrapper({ handlers }),
+    });
+
+    await act(async () => {
+      await result.current("unknown");
+    });
+
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  it("resolves $item inside repeat scope", async () => {
+    const store = createStore();
+    const handler = vi.fn();
+    const handlers = { del: handler };
+    const on = { click: { action: "del", params: { path: { $item: "" } } } };
+
+    const { result } = renderHook(() => useEmit(on), {
+      wrapper: createWrapper({ store, handlers, repeatPath: "/items/3", repeatIndex: 3 }),
+    });
+
+    await act(async () => {
+      await result.current("click");
+    });
+
+    expect(handler).toHaveBeenCalledWith(
+      { path: "/items/3" },
+      expect.anything(),
+    );
+  });
+
+  it("throws outside ActionProvider", () => {
+    expect(() =>
+      renderHook(() => useEmit(), {
+        wrapper: ({ children }) => children,
+      }),
+    ).toThrow("useEmit must be used within an ActionProvider");
+  });
+});

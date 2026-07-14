@@ -2,15 +2,17 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    include: ["src/**/*.test.ts"],
+    include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+    environment: "jsdom",
+    setupFiles: ["src/test-setup.ts"],
     coverage: {
       provider: "v8",
       include: ["src/**/*.ts", "src/**/*.tsx"],
       exclude: ["src/**/*.test.ts", "src/spec.ts", "src/index.ts"],
       thresholds: {
-        lines: 35,
-        functions: 30,
-        branches: 40,
+        lines: 55,
+        functions: 50,
+        branches: 50,
       },
     },
   },
