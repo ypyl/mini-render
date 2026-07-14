@@ -18,6 +18,9 @@ import {
   type Registry,
   type ComponentProps,
 } from "mini-render";
+import basicSpec from "./specs/basic.json";
+import formSpec from "./specs/form.json";
+import actionSpec from "./specs/actions.json";
 
 // ── Presentational components (pure, no store knowledge) ──────────
 
@@ -311,61 +314,6 @@ function buildTableSpec(itemCount: number): Spec {
     },
   };
 }
-
-// ── Other specs ───────────────────────────────────────────────────
-
-const basicSpec: Spec = {
-  root: "card",
-  elements: {
-    card: {
-      type: "Card",
-      props: { title: "Basic Static Rendering" },
-      children: ["greeting"],
-    },
-    greeting: { type: "StaticText", props: { text: "Hello from mini-render!" } },
-  },
-};
-
-const formSpec: Spec = {
-  root: "card",
-  elements: {
-    card: {
-      type: "Card",
-      props: { title: "Bound Editable Fields" },
-      children: ["toggleBtn", "name", "email"],
-    },
-    toggleBtn: {
-      type: "EditToggle",
-      on: { edit: { action: "startEdit" }, save: { action: "saveEdit" }, cancel: { action: "cancelEdit" } },
-    },
-    name: { type: "BoundField", props: { bind: "name", label: "Name" } },
-    email: { type: "BoundField", props: { bind: "email", label: "Email" } },
-  },
-};
-
-const actionSpec: Spec = {
-  root: "card",
-  elements: {
-    card: {
-      type: "Card",
-      props: { title: "Action Dispatch" },
-      children: ["toggleBtn", "btn", "status"],
-    },
-    toggleBtn: {
-      type: "EditToggle",
-      on: { edit: { action: "startEdit" }, save: { action: "saveEdit" }, cancel: { action: "cancelEdit" } },
-    },
-    btn: {
-      type: "ActionButton",
-      props: { label: "Save Document" },
-      on: { click: { action: "saveDoc" } },
-    },
-    status: {
-      type: "BoundField",
-      props: { bind: "/savedAt", label: "Last saved at" },
-    },
-  },
-};
 
 // ── App ───────────────────────────────────────────────────────────
 

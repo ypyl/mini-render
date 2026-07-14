@@ -1,0 +1,27 @@
+{
+  "root": "card",
+  "elements": {
+    "card": {
+      "type": "Card",
+      "props": { "title": "Action Dispatch" },
+      "children": ["toggleBtn", "btn", "status"]
+    },
+    "toggleBtn": {
+      "type": "EditToggle",
+      "on": {
+        "edit": { "action": "startEdit" },
+        "save": { "action": "saveEdit" },
+        "cancel": { "action": "cancelEdit" }
+      }
+    },
+    "btn": {
+      "type": "ActionButton",
+      "props": { "label": "Save Document" },
+      "on": { "click": { "action": "saveDoc" } }
+    },
+    "status": {
+      "type": "BoundField",
+      "props": { "bind": "/savedAt", "label": "Last saved at" }
+    }
+  }
+}

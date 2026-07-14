@@ -73,7 +73,6 @@ function createStore(initial: Record<string, unknown> = {}) {
       return () => { s!.delete(listener); if (s && s.size === 0) listeners.delete(path); };
     },
     getState() { return state; },
-    getServerSnapshot() { return state; },
   };
 }
 

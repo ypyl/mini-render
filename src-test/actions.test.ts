@@ -51,7 +51,7 @@ function pathsOverlap(a: string, b: string): boolean {
 }
 
 type Listener = () => void;
-interface Store { get(p: string): unknown; set(p: string, v: unknown): void; subscribe(p: string, fn: Listener): () => void; getState(): unknown; getServerSnapshot(): unknown; }
+interface Store { get(p: string): unknown; set(p: string, v: unknown): void; subscribe(p: string, fn: Listener): () => void; getState(): unknown; }
 function createStore(initial: Record<string, unknown> = {}): Store {
   let state: unknown = { ...initial };
   const listeners = new Map<string, Set<Listener>>();
@@ -71,7 +71,6 @@ function createStore(initial: Record<string, unknown> = {}): Store {
       return () => { s!.delete(fn); if (s && s.size === 0) listeners.delete(p); };
     },
     getState() { return state; },
-    getServerSnapshot() { return state; },
   };
 }
 

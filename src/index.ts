@@ -20,10 +20,8 @@ export {
   type Handler,
   type Handlers,
   type ActionContextValue,
-  type StoreProviderProps,
-  type ActionProviderProps,
 } from "./contexts";
-export { useStore, useValue, useSetValue, useBound, useEmit, resolveParams, useItemPath, useRepeatPath, useRepeatIndex } from "./hooks";
+export { useStore, useValue, useSetValue, useBound, useEmit, useItemPath, useRepeatPath, useRepeatIndex } from "./hooks";
 export {
   Renderer,
   type ComponentProps,

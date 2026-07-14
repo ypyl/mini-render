@@ -1,0 +1,14 @@
+{
+  "root": "card",
+  "elements": {
+    "card": {
+      "type": "Card",
+      "props": { "title": "Basic Static Rendering" },
+      "children": ["greeting"]
+    },
+    "greeting": {
+      "type": "StaticText",
+      "props": { "text": "Hello from mini-render!" }
+    }
+  }
+}

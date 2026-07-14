@@ -1,0 +1,26 @@
+{
+  "root": "card",
+  "elements": {
+    "card": {
+      "type": "Card",
+      "props": { "title": "Bound Editable Fields" },
+      "children": ["toggleBtn", "name", "email"]
+    },
+    "toggleBtn": {
+      "type": "EditToggle",
+      "on": {
+        "edit": { "action": "startEdit" },
+        "save": { "action": "saveEdit" },
+        "cancel": { "action": "cancelEdit" }
+      }
+    },
+    "name": {
+      "type": "BoundField",
+      "props": { "bind": "name", "label": "Name" }
+    },
+    "email": {
+      "type": "BoundField",
+      "props": { "bind": "email", "label": "Email" }
+    }
+  }
+}

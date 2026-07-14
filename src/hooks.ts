@@ -83,7 +83,7 @@ export function useBound<T>(path: string): [T | undefined, (value: T) => void] {
 
 /** Resolve `{ $state: "<path>" }` references in action params at dispatch time. Recurses into nested objects.
  * Also resolves `{ $item: "<field>" }` to `${basePath}/${field}` and `{ $index: boolean }` to the numeric index. */
-export function resolveParams(
+function resolveParams(
   params: Record<string, unknown>,
   getState: () => unknown,
   repeatBasePath?: string,
