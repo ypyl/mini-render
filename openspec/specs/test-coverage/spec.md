@@ -18,7 +18,7 @@ The project SHALL generate code coverage reports using `@vitest/coverage-v8`. Ru
 #### Scenario: Coverage meets thresholds
 - **WHEN** `npm run coverage` is executed
 - **THEN** coverage is reported for all source files in `src/` (excluding `spec.ts` and `index.ts`)
-- **AND** the report shows at least 55% line coverage
+- **AND** the report shows at least 85% line coverage
 
 #### Scenario: Coverage falls below threshold
 - **WHEN** code changes cause line coverage to drop below 35%
@@ -51,4 +51,4 @@ The Vitest configuration SHALL define coverage thresholds that fail the build wh
 
 #### Scenario: Thresholds configured
 - **WHEN** `vitest.config.ts` is read
-- **THEN** it contains a `coverage.thresholds` object with at minimum: `lines: 55`, `functions: 50`, `branches: 50`
+- **THEN** it contains a `coverage.thresholds` object with at minimum: `lines: 85`, `functions: 85`, `branches: 80`

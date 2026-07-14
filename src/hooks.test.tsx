@@ -301,6 +301,24 @@ describe("useEmit", () => {
     );
   });
 
+  it("does not warn for built-in setState action", async () => {
+    const store = createStore();
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const on = { click: { action: "setState", params: { path: "/x", value: 1 } } };
+
+    const { result } = renderHook(() => useEmit(on), {
+      wrapper: createWrapper({ store }),
+    });
+
+    await act(async () => {
+      await result.current("click");
+    });
+
+    expect(warn).not.toHaveBeenCalled();
+    expect(store.get("/x")).toBe(1);
+    warn.mockRestore();
+  });
+
   it("throws outside ActionProvider", () => {
     expect(() =>
       renderHook(() => useEmit(), {

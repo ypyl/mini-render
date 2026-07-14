@@ -101,3 +101,8 @@ test("set: no-op when strictly equal value does not notify", () => {
   store.set("/x", 2);
   assert.equal(calls, 1);
 });
+
+test("immutableSetByPath sets array index at terminal path", () => {
+  const next = immutableSetByPath({ items: ["a", "b"] }, "/items/0", "X") as Record<string, unknown>;
+  assert.deepStrictEqual(next.items, ["X", "b"]);
+});

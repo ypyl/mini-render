@@ -86,3 +86,16 @@ test("resolveParams: mixed $item and $state in same params", () => {
   const out = resolveParams({ itemPath: { $item: "" }, userId: { $state: "/user/id" } }, getState, "/items/2");
   assert.deepStrictEqual(out, { itemPath: "/items/2", userId: 42 });
 });
+
+test("resolveParams: $index false returns undefined", () => {
+  const out = resolveParams({ pos: { $index: false } }, () => ({}), "/items/3", 3);
+  assert.deepStrictEqual(out, { pos: undefined });
+});
+
+test("builtinSetState does nothing when path is falsy", () => {
+  const store = createStore({ x: 1 });
+  builtinSetState({ path: undefined, value: 99 }, { getState: store.getState, setState: store.set });
+  assert.equal(store.get("/x"), 1);
+  builtinSetState({ path: "", value: 99 }, { getState: store.getState, setState: store.set });
+  assert.equal(store.get("/x"), 1);
+});
