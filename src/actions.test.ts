@@ -1,7 +1,6 @@
 // actions.test.ts — self-checks for the action system (resolveParams, setState built-in).
 // Imports from source; keeps BUILTIN_SET_STATE inlined (React-free). Pure logic.
-import { test } from "vitest";
-import assert from "node:assert/strict";
+import { describe, it, expect } from "vitest";
 import { getByPath, createStore } from "./store";
 import { resolveParams } from "./hooks";
 
@@ -16,86 +15,90 @@ const builtinSetState = (
 
 // ── Tests ─────────────────────────────────────────────────────────
 
-test("resolveParams replaces { $state } references with current store values", () => {
-  const getState = () => ({ doc: { id: 42 }, items: [{ name: "A" }] });
-  const out = resolveParams({ id: { $state: "/doc/id" }, label: "static", nested: { ref: { $state: "/items/0/name" } } }, getState);
-  assert.deepStrictEqual(out, { id: 42, label: "static", nested: { ref: "A" } });
+describe("resolveParams", () => {
+  it("replaces { $state } references with current store values", () => {
+    const getState = () => ({ doc: { id: 42 }, items: [{ name: "A" }] });
+    const out = resolveParams({ id: { $state: "/doc/id" }, label: "static", nested: { ref: { $state: "/items/0/name" } } }, getState);
+    expect(out).toEqual({ id: 42, label: "static", nested: { ref: "A" } });
+  });
+
+  it("passes through non-$state values unchanged", () => {
+    const out = resolveParams({ a: 1, b: "x", c: { d: 3 } }, () => ({}));
+    expect(out).toEqual({ a: 1, b: "x", c: { d: 3 } });
+  });
+
+  it("$item with field resolves to absolute path", () => {
+    const out = resolveParams({ itemPath: { $item: "name" } }, () => ({}), "/items/3");
+    expect(out).toEqual({ itemPath: "/items/3/name" });
+  });
+
+  it("$item with empty string resolves to base path", () => {
+    const out = resolveParams({ row: { $item: "" } }, () => ({}), "/items/7");
+    expect(out).toEqual({ row: "/items/7" });
+  });
+
+  it("$item outside repeat resolves to undefined", () => {
+    const out = resolveParams({ x: { $item: "name" } }, () => ({}));
+    expect(out).toEqual({ x: undefined });
+  });
+
+  it("$index inside repeat returns index", () => {
+    const out = resolveParams({ pos: { $index: true } }, () => ({}), "/items/3", 3);
+    expect(out).toEqual({ pos: 3 });
+  });
+
+  it("$index outside repeat returns undefined", () => {
+    const out = resolveParams({ pos: { $index: true } }, () => ({}));
+    expect(out).toEqual({ pos: undefined });
+  });
+
+  it("mixed $item and $state in same params", () => {
+    const getState = () => ({ user: { id: 42 } });
+    const out = resolveParams({ itemPath: { $item: "" }, userId: { $state: "/user/id" } }, getState, "/items/2");
+    expect(out).toEqual({ itemPath: "/items/2", userId: 42 });
+  });
+
+  it("$index false returns undefined", () => {
+    const out = resolveParams({ pos: { $index: false } }, () => ({}), "/items/3", 3);
+    expect(out).toEqual({ pos: undefined });
+  });
 });
 
-test("resolveParams passes through non-$state values unchanged", () => {
-  const out = resolveParams({ a: 1, b: "x", c: { d: 3 } }, () => ({}));
-  assert.deepStrictEqual(out, { a: 1, b: "x", c: { d: 3 } });
+describe("builtinSetState", () => {
+  it("writes a path", () => {
+    const store = createStore({ flag: false });
+    let called = 0;
+    store.subscribe("/flag", () => called++);
+    builtinSetState({ path: "/flag", value: true }, { getState: store.getState, setState: store.set });
+    expect(called).toBe(1);
+    expect(store.get("/flag")).toBe(true);
+  });
+
+  it("does nothing when path is falsy", () => {
+    const store = createStore({ x: 1 });
+    builtinSetState({ path: undefined, value: 99 }, { getState: store.getState, setState: store.set });
+    expect(store.get("/x")).toBe(1);
+    builtinSetState({ path: "", value: 99 }, { getState: store.getState, setState: store.set });
+    expect(store.get("/x")).toBe(1);
+  });
 });
 
-test("setState built-in handler writes a path", () => {
-  const store = createStore({ flag: false });
-  let called = 0;
-  store.subscribe("/flag", () => called++);
-  builtinSetState({ path: "/flag", value: true }, { getState: store.getState, setState: store.set });
-  assert.equal(called, 1);
-  assert.equal(store.get("/flag"), true);
-});
+describe("handler edge cases", () => {
+  it("handler that does nothing causes no store notification", () => {
+    const store = createStore();
+    let calls = 0;
+    store.subscribe("/any", () => calls++);
+    // noop
+    expect(calls).toBe(0);
+  });
 
-test("handler that does nothing causes no store notification", () => {
-  const store = createStore();
-  let calls = 0;
-  store.subscribe("/any", () => calls++);
-  // noop
-  assert.equal(calls, 0);
-});
-
-test("async handler writes after await (late setState)", async () => {
-  const store = createStore({ saved: false });
-  const handler = async (params: Record<string, unknown>, api: { getState: () => unknown; setState: (p: string, v: unknown) => void }) => {
-    await new Promise((r) => setTimeout(r, 10));
-    api.setState("/saved", true);
-  };
-  await handler({}, { getState: store.getState, setState: store.set });
-  assert.equal(store.get("/saved"), true);
-});
-
-// ── $item / $index tests ──────────────────────────────────────────
-
-test("resolveParams: $item with field resolves to absolute path", () => {
-  const out = resolveParams({ itemPath: { $item: "name" } }, () => ({}), "/items/3");
-  assert.deepStrictEqual(out, { itemPath: "/items/3/name" });
-});
-
-test("resolveParams: $item with empty string resolves to base path", () => {
-  const out = resolveParams({ row: { $item: "" } }, () => ({}), "/items/7");
-  assert.deepStrictEqual(out, { row: "/items/7" });
-});
-
-test("resolveParams: $item outside repeat resolves to undefined", () => {
-  const out = resolveParams({ x: { $item: "name" } }, () => ({}));
-  assert.deepStrictEqual(out, { x: undefined });
-});
-
-test("resolveParams: $index inside repeat returns index", () => {
-  const out = resolveParams({ pos: { $index: true } }, () => ({}), "/items/3", 3);
-  assert.deepStrictEqual(out, { pos: 3 });
-});
-
-test("resolveParams: $index outside repeat returns undefined", () => {
-  const out = resolveParams({ pos: { $index: true } }, () => ({}));
-  assert.deepStrictEqual(out, { pos: undefined });
-});
-
-test("resolveParams: mixed $item and $state in same params", () => {
-  const getState = () => ({ user: { id: 42 } });
-  const out = resolveParams({ itemPath: { $item: "" }, userId: { $state: "/user/id" } }, getState, "/items/2");
-  assert.deepStrictEqual(out, { itemPath: "/items/2", userId: 42 });
-});
-
-test("resolveParams: $index false returns undefined", () => {
-  const out = resolveParams({ pos: { $index: false } }, () => ({}), "/items/3", 3);
-  assert.deepStrictEqual(out, { pos: undefined });
-});
-
-test("builtinSetState does nothing when path is falsy", () => {
-  const store = createStore({ x: 1 });
-  builtinSetState({ path: undefined, value: 99 }, { getState: store.getState, setState: store.set });
-  assert.equal(store.get("/x"), 1);
-  builtinSetState({ path: "", value: 99 }, { getState: store.getState, setState: store.set });
-  assert.equal(store.get("/x"), 1);
+  it("async handler writes after await (late setState)", async () => {
+    const store = createStore({ saved: false });
+    const handler = async (params: Record<string, unknown>, api: { getState: () => unknown; setState: (p: string, v: unknown) => void }) => {
+      await new Promise((r) => setTimeout(r, 10));
+      api.setState("/saved", true);
+    };
+    await handler({}, { getState: store.getState, setState: store.set });
+    expect(store.get("/saved")).toBe(true);
+  });
 });
