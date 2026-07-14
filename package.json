@@ -5,7 +5,8 @@
   "type": "module",
   "main": "src/index.ts",
   "scripts": {
-    "test": "tsc -p tsconfig.test.json && node --test dist-test/store.test.js dist-test/actions.test.js"
+    "test": "vitest run",
+    "coverage": "vitest run --coverage"
   },
   "peerDependencies": {
     "react": "^19.0.0",
@@ -15,6 +16,8 @@
     "@types/node": "^26.0.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "typescript": "~6.0.2"
+    "@vitest/coverage-v8": "^4.1.10",
+    "typescript": "~6.0.2",
+    "vitest": "^4.1.10"
   }
 }

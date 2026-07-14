@@ -1,80 +1,13 @@
-// store.test.ts — self-checks for the path-based store (fully self-contained).
-// Pure logic, no React, no module imports needed.
-import { test } from "node:test";
+// store.test.ts — self-checks for the path-based store.
+// Imports from source; no inlined copies. Pure logic, no React.
+import { test } from "vitest";
 import assert from "node:assert/strict";
-
-// ── Inlined store implementation ───────────────────────────────────
-
-function getByPath(state: unknown, path: string): unknown {
-  const p = path[0] === "/" ? path.slice(1) : path;
-  const segs = p ? p.split("/").filter((s) => s.length > 0) : [];
-  let cur: unknown = state;
-  for (const seg of segs) {
-    if (cur == null || typeof cur !== "object") return undefined;
-    cur = (cur as Record<string, unknown>)[seg];
-  }
-  return cur;
-}
-
-function immutableSetByPath(root: unknown, path: string, value: unknown): unknown {
-  const p = path[0] === "/" ? path.slice(1) : path;
-  const segs = p ? p.split("/").filter((s) => s.length > 0) : [];
-  if (segs.length === 0) return value;
-  const base = root !== null && typeof root === "object" && !Array.isArray(root)
-    ? { ...(root as Record<string, unknown>) }
-    : Array.isArray(root) ? [...(root as unknown[])] : {};
-  let cur: Record<string, unknown> | unknown[] = base;
-  for (let i = 0; i < segs.length - 1; i++) {
-    const seg = segs[i]!;
-    const nextSeg = segs[i + 1]!;
-    let child = (cur as Record<string, unknown>)[seg];
-    if (Array.isArray(child)) child = [...child];
-    else if (child !== null && typeof child === "object") child = { ...(child as Record<string, unknown>) };
-    else child = /^\d+$/.test(nextSeg) ? [] : {};
-    (cur as Record<string, unknown>)[seg] = child;
-    cur = child as Record<string, unknown> | unknown[];
-  }
-  const last = segs[segs.length - 1]!;
-  if (Array.isArray(cur)) (cur as unknown[])[parseInt(last, 10)] = value;
-  else (cur as Record<string, unknown>)[last] = value;
-  return base;
-}
-
-function pathsOverlap(a: string, b: string): boolean {
-  if (a === b) return true;
-  const seg = (s: string) => { const p = s[0] === "/" ? s.slice(1) : s; return p ? p.split("/") : []; };
-  const sa = seg(a), sb = seg(b);
-  const min = Math.min(sa.length, sb.length);
-  for (let i = 0; i < min; i++) if (sa[i] !== sb[i]) return false;
-  return true;
-}
-
-type Listener = () => void;
-
-function createStore(initial: Record<string, unknown> = {}) {
-  let state: unknown = { ...initial };
-  const listeners = new Map<string, Set<Listener>>();
-  function notify(affected: string) {
-    for (const [sp, set] of listeners) {
-      if (pathsOverlap(sp, affected)) for (const fn of set) fn();
-    }
-  }
-  return {
-    get(path: string) { return getByPath(state, path); },
-    set(path: string, value: unknown) {
-      if (getByPath(state, path) === value) return;
-      state = immutableSetByPath(state, path, value);
-      notify(path);
-    },
-    subscribe(path: string, listener: Listener) {
-      let s = listeners.get(path);
-      if (!s) { s = new Set(); listeners.set(path, s); }
-      s.add(listener);
-      return () => { s!.delete(listener); if (s && s.size === 0) listeners.delete(path); };
-    },
-    getState() { return state; },
-  };
-}
+import {
+  getByPath,
+  immutableSetByPath,
+  pathsOverlap,
+  createStore,
+} from "./store";
 
 // ── Tests ─────────────────────────────────────────────────────────
 
