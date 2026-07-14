@@ -69,4 +69,16 @@ describe("ActionProvider", () => {
     // Both present but user handler is the actual value (we only check keys here)
     expect(getByTestId("actions").textContent).toContain("setState");
   });
+
+  it("works without builtins prop (undefined default)", () => {
+    const store = createStore();
+    const { getByTestId } = render(
+      <StoreProvider store={store}>
+        <ActionProvider handlers={{}} store={store}>
+          <ActionReader />
+        </ActionProvider>
+      </StoreProvider>,
+    );
+    expect(getByTestId("actions").textContent).toBe("");
+  });
 });

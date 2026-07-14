@@ -207,4 +207,23 @@ describe("RepeatChildren", () => {
     // Only the list container, no rows
     expect(Spy.called).toHaveLength(1);
   });
+
+  it("falls back to index when key field is missing on items", () => {
+    // Items have no id field, but repeat config specifies key: "id"
+    const store = createStore({ items: [{ name: "A" }, { name: "B" }] });
+    const Spy = makeSpy();
+    const registry: Registry = { Spy };
+    const spec: Spec = {
+      root: "list",
+      elements: {
+        list: { type: "Spy", repeat: { path: "/items", key: "id" }, children: ["row"] },
+        row: { type: "Spy" },
+      },
+    };
+
+    render(<Renderer spec={spec} registry={registry} store={store} />);
+
+    // 1 list + 2 rows = 3 renders (no crash despite missing key field)
+    expect(Spy.called).toHaveLength(3);
+  });
 });

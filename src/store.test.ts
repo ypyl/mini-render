@@ -106,3 +106,18 @@ test("immutableSetByPath sets array index at terminal path", () => {
   const next = immutableSetByPath({ items: ["a", "b"] }, "/items/0", "X") as Record<string, unknown>;
   assert.deepStrictEqual(next.items, ["X", "b"]);
 });
+
+test("immutableSetByPath coerces null root to empty object", () => {
+  const next = immutableSetByPath(null, "/x", 42) as Record<string, unknown>;
+  assert.equal(getByPath(next, "/x"), 42);
+});
+
+test("subscribe: two listeners on same path both notified", () => {
+  const store = createStore({ x: 1 });
+  let a = 0, b = 0;
+  store.subscribe("/x", () => a++);
+  store.subscribe("/x", () => b++);
+  store.set("/x", 2);
+  assert.equal(a, 1);
+  assert.equal(b, 1);
+});

@@ -4,6 +4,7 @@ import { renderHook, act } from "@testing-library/react";
 import { useStore, useValue, useSetValue, useBound, useEmit, useItemPath, useRepeatPath, useRepeatIndex } from "./hooks";
 import { createStore } from "./store";
 import { createWrapper } from "./test-utils";
+import { StoreProvider, ActionProvider } from "./contexts";
 
 // ── useStore ──────────────────────────────────────────────────────
 
@@ -316,6 +317,32 @@ describe("useEmit", () => {
 
     expect(warn).not.toHaveBeenCalled();
     expect(store.get("/x")).toBe(1);
+    warn.mockRestore();
+  });
+
+  it("skips warning for 'setState' action even when no handler registered", async () => {
+    const store = createStore();
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const on = { click: { action: "setState" } };
+
+    // ActionProvider without builtins — setState is not in handlers
+    const NoBuiltinsWrapper = ({ children }: { children: React.ReactNode }) => (
+      <StoreProvider store={store}>
+        <ActionProvider handlers={{}} store={store}>
+          {children}
+        </ActionProvider>
+      </StoreProvider>
+    );
+
+    const { result } = renderHook(() => useEmit(on), {
+      wrapper: NoBuiltinsWrapper,
+    });
+
+    await act(async () => {
+      await result.current("click");
+    });
+
+    expect(warn).not.toHaveBeenCalled();
     warn.mockRestore();
   });
 
