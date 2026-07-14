@@ -3,11 +3,11 @@
   "compilerOptions": {
     "noEmit": false,
     "outDir": "dist-test",
-    "rootDir": "src-test",
+    "rootDir": "src",
     "declaration": false,
     "sourceMap": false,
     "jsx": "react-jsx"
   },
-  "include": ["src-test/**/*.ts"],
+  "include": ["src/**/*.test.ts"],
   "exclude": ["demo", "dist-test"]
 }
