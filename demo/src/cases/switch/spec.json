@@ -7,7 +7,7 @@
       "children": ["buttons", "statusLabel", "switch"]
     },
     "buttons": {
-      "type": "Row",
+      "type": "ButtonGroup",
       "children": ["btnLoading", "btnLoaded", "btnError"]
     },
     "btnLoading": {

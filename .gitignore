@@ -6,3 +6,4 @@ dist-test/
 .pi/
 coverage/
 coverage-html/
+.playwright-cli/

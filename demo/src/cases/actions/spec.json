@@ -4,6 +4,11 @@
     "card": {
       "type": "Card",
       "props": { "title": "Action Dispatch" },
+      "children": ["body"]
+    },
+    "body": {
+      "type": "StackRow",
+      "props": { "gap": "md", "align": "flex-start" },
       "children": ["toggleBtn", "btn", "status"]
     },
     "toggleBtn": {

@@ -8,6 +8,11 @@ export function buildLargeSpec(itemCount: number): Spec {
       root: {
         type: "Card",
         props: { title: `${itemCount}-Row Editable Table (edit any cell)` },
+        children: ["body"],
+      },
+      body: {
+        type: "StackRow",
+        props: { gap: "md" },
         children: ["toggleBtn", "list"],
       },
       toggleBtn: {

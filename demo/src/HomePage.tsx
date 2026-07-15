@@ -31,7 +31,7 @@ const CASES = [
     route: "/table",
     emoji: "📋",
     title: "Table",
-    description: "HTML table rendering with <thead>/<tbody> structure built via repeat.",
+    description: "1,000-row HTML table with <thead>/<tbody> structure built via repeat.",
   },
   {
     route: "/switch",
