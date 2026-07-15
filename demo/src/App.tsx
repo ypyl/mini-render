@@ -11,7 +11,7 @@ import { SwitchCase } from "./cases/switch/SwitchCase";
 
 export function App() {
   return (
-    <Router>
+    <Router base="/mini-render">
       <Switch>
         <Route path="/" component={HomePage} />
         <Route path="/basic" component={BasicCase} />
