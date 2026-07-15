@@ -1,6 +1,6 @@
 // HomePage.tsx — landing page with feature cards for each demo case.
 import { Link } from "wouter";
-import { Card, Container, SimpleGrid, Text, Title } from "@mantine/core";
+import { Card, Container, SimpleGrid, Text, Title, Anchor } from "@mantine/core";
 
 const CASES = [
   {
@@ -51,6 +51,16 @@ export function HomePage() {
         A minimal spec-driven React UI renderer with granular per-path subscriptions.
         Each demo below is a self-contained example built from the same public API.
       </Text>
+      <Anchor
+        href="https://github.com/ypyl/mini-render"
+        target="_blank"
+        size="sm"
+        ta="center"
+        display="block"
+        mb="xl"
+      >
+        View source on GitHub →
+      </Anchor>
       <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg">
         {CASES.map((c) => (
           <Card
