@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: cd demo && npm install
+      - run: npm install && cd demo && npm install
       - run: cd demo && npm run build
       - run: cp demo/dist/index.html demo/dist/404.html
       - uses: actions/configure-pages@v4
