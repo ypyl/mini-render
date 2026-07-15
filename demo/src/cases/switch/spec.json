@@ -1,0 +1,60 @@
+{
+  "root": "card",
+  "elements": {
+    "card": {
+      "type": "Card",
+      "props": { "title": "Switch Demo" },
+      "children": ["buttons", "statusLabel", "switch"]
+    },
+    "buttons": {
+      "type": "Row",
+      "children": ["btnLoading", "btnLoaded", "btnError"]
+    },
+    "btnLoading": {
+      "type": "ActionButton",
+      "props": { "label": "Loading" },
+      "on": { "click": { "action": "setStatus", "params": { "status": "loading" } } }
+    },
+    "btnLoaded": {
+      "type": "ActionButton",
+      "props": { "label": "Loaded" },
+      "on": { "click": { "action": "setStatus", "params": { "status": "loaded" } } }
+    },
+    "btnError": {
+      "type": "ActionButton",
+      "props": { "label": "Error" },
+      "on": { "click": { "action": "setStatus", "params": { "status": "error" } } }
+    },
+    "statusLabel": {
+      "type": "BoundField",
+      "props": { "bind": "/appStatus", "label": "Current Status" }
+    },
+    "switch": {
+      "type": "Switch",
+      "props": { "path": "/appStatus" },
+      "children": ["loading", "loaded", "error"]
+    },
+    "loading": {
+      "type": "StaticText",
+      "props": { "text": "⏳ Loading..." }
+    },
+    "loaded": {
+      "type": "Card",
+      "props": { "title": "✅ Loaded" },
+      "children": ["loadedText"]
+    },
+    "loadedText": {
+      "type": "StaticText",
+      "props": { "text": "Data loaded successfully!" }
+    },
+    "error": {
+      "type": "Card",
+      "props": { "title": "❌ Error" },
+      "children": ["errorText"]
+    },
+    "errorText": {
+      "type": "StaticText",
+      "props": { "text": "Something went wrong." }
+    }
+  }
+}

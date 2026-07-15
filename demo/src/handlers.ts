@@ -25,6 +25,9 @@ export const handlers: Handlers = {
     setState("/_snapshot", undefined);
     setState("/editingSection", false);
   },
+  setStatus: (params, { setState }) => {
+    setState("/appStatus", params.status);
+  },
   removeItem: (params, { getState, setState }) => {
     const idx = params.index as number;
     const s = getState() as Record<string, unknown>;

@@ -6,8 +6,9 @@ import { FormCase } from "./cases/form/FormCase";
 import { ActionsCase } from "./cases/actions/ActionsCase";
 import { LargeCase } from "./cases/large/LargeCase";
 import { TableCase } from "./cases/table/TableCase";
+import { SwitchCase } from "./cases/switch/SwitchCase";
 
-type Tab = "basic" | "form" | "actions" | "large" | "table";
+type Tab = "basic" | "form" | "actions" | "large" | "table" | "switch";
 
 export function App() {
   const [tab, setTab] = useState<Tab>("form");
@@ -24,6 +25,7 @@ export function App() {
           { label: "Actions", value: "actions" },
           { label: "Large (1000)", value: "large" },
           { label: "Table", value: "table" },
+          { label: "Switch", value: "switch" },
         ]}
       />
       {tab === "basic" && <BasicCase />}
@@ -31,6 +33,7 @@ export function App() {
       {tab === "actions" && <ActionsCase />}
       {tab === "large" && <LargeCase />}
       {tab === "table" && <TableCase />}
+      {tab === "switch" && <SwitchCase />}
     </Stack>
   );
 }
