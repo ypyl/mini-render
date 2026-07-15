@@ -1,8 +1,10 @@
 # mini-render
 
-A ~300-line spec-driven React renderer with **granular per-path re-renders**. Edit one cell in a 1000-row table — only that one cell's component re-renders.
+A ~700-line spec-driven React renderer with **granular per-path re-renders**. Edit one cell in a 1000-row table — only that one cell's component re-renders.
 
 Built as a minimal alternative to `@json-render/react`, dropping AI streaming, Zod validation, directives, devtools, and multi-framework output. Just the rendering core, a path-based store, and an action system.
+
+**[Live demo →](https://ypyl.github.io/mini-render/)**
 
 ## Why
 
@@ -40,7 +42,7 @@ Built as a minimal alternative to `@json-render/react`, dropping AI streaming, Z
 ## Quick start
 
 ```bash
-cd mini-render/demo
+cd demo
 npm install
 npm run dev     # http://localhost:5173
 ```
@@ -197,19 +199,21 @@ interface ActionBinding {
 ## Tests
 
 ```bash
-npm test   # 20 pure-logic tests (store + actions), zero framework deps
+npm test   # 31 pure-logic tests (store + actions), zero framework deps
 ```
 
 ## Demo
 
-The demo app (`demo/`) has four tabs:
+The demo app (`demo/`) has six self-contained cases:
 
-| Tab | What it shows |
+| Case | What it shows |
 |-----|---------------|
 | **Basic** | Static spec rendering |
 | **Form** | `BoundField` inputs with read-only/editable toggle |
 | **Actions** | `ActionButton` + handler writes timestamp to store |
 | **Large (1000)** | 1000-row × 2-column editable table via `repeat` — edit one cell, only that cell re-renders. Per-row ✕ delete using `{ $index: true }`. |
+| **Table** | 1000-row HTML `<table>` with `<thead>`/`<tbody>` structure built via `repeat` |
+| **Switch** | Conditional rendering via `useValue` — three mutually-exclusive status views |
 
 ## vs json-render
 
@@ -223,4 +227,4 @@ The demo app (`demo/`) has four tabs:
 | Devtools | ✓ | ✗ |
 | Vue/Svelte/Solid | ✓ | ✗ |
 | Runtime deps | React + Zod | React only |
-| LOC (core) | ~3,000 | ~450 |
+| LOC (core) | ~3,000 | ~700 |
