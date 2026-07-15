@@ -1,10 +1,22 @@
 // ActionsCase.tsx — action dispatch demo.
-import { Renderer } from "mini-render";
+import { useState } from "react";
+import { Link } from "wouter";
+import { Container, Breadcrumbs } from "@mantine/core";
+import { Renderer, createStore } from "mini-render";
 import actionSpec from "./spec.json";
-import { store } from "../../store";
-import { handlers } from "../../handlers";
 import { registry } from "./registry";
+import { handlers } from "./handlers";
 
 export function ActionsCase() {
-  return <Renderer spec={actionSpec} registry={registry} store={store} handlers={handlers} />;
+  const [store] = useState(() => createStore({}));
+
+  return (
+    <Container size="md" py="md">
+      <Breadcrumbs mb="md">
+        <Link href="/">Home</Link>
+        <span>Actions</span>
+      </Breadcrumbs>
+      <Renderer spec={actionSpec} registry={registry} store={store} handlers={handlers} />
+    </Container>
+  );
 }

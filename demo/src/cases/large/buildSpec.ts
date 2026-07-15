@@ -15,15 +15,15 @@ export function buildLargeSpec(itemCount: number): Spec {
         on: { edit: { action: "startEdit" }, save: { action: "saveEdit" }, cancel: { action: "cancelEdit" } },
       },
       list: {
-        type: "Card",
-        props: {},
+        type: "StackRow",
+        props: { gap: "md" },
         repeat: { path: "/items" },
         children: ["row"],
       },
       row: {
-        type: "Row",
+        type: "FieldsetRow",
         props: {},
-        children: ["deleteBtn", "cellName", "cellEmail"],
+        children: ["cellName", "cellEmail", "deleteBtn"],
       },
       deleteBtn: {
         type: "ActionButton",

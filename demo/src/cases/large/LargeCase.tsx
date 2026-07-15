@@ -1,22 +1,30 @@
 // LargeCase.tsx — 1000-row editable table with repeat.
-import { useMemo } from "react";
-import { Renderer } from "mini-render";
-import { store } from "../../store";
-import { handlers } from "../../handlers";
+import { useMemo, useState } from "react";
+import { Link } from "wouter";
+import { Container, Breadcrumbs } from "@mantine/core";
+import { Renderer, createStore } from "mini-render";
+import { handlers } from "./handlers";
 import { registry } from "./registry";
 import { buildLargeSpec } from "./buildSpec";
 
 export function LargeCase() {
-  // Seed data once (idempotent)
-  if (store.get("/items") === undefined) {
+  const [store] = useState(() => {
     const items: { name: string; email: string }[] = [];
     for (let i = 0; i < 1000; i++) {
       items.push({ name: `User ${i}`, email: `user${i}@example.com` });
     }
-    store.set("/items", items);
-  }
+    return createStore({ items });
+  });
 
   const spec = useMemo(() => buildLargeSpec(1000), []);
 
-  return <Renderer spec={spec} registry={registry} store={store} handlers={handlers} />;
+  return (
+    <Container size="md" py="md">
+      <Breadcrumbs mb="md">
+        <Link href="/">Home</Link>
+        <span>Large</span>
+      </Breadcrumbs>
+      <Renderer spec={spec} registry={registry} store={store} handlers={handlers} />
+    </Container>
+  );
 }

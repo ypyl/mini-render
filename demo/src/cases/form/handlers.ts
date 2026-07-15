@@ -1,10 +1,7 @@
-// handlers.ts — shared action handlers for the demo.
+// form/handlers.ts — handlers for the bound editable fields demo.
 import type { Handlers } from "mini-render";
 
 export const handlers: Handlers = {
-  saveDoc: (_params, { setState }) => {
-    setState("/savedAt", new Date().toISOString());
-  },
   startEdit: (_params, { getState, setState }) => {
     setState("/_snapshot", structuredClone(getState()));
     setState("/editingSection", true);
@@ -24,14 +21,5 @@ export const handlers: Handlers = {
     }
     setState("/_snapshot", undefined);
     setState("/editingSection", false);
-  },
-  setStatus: (params, { setState }) => {
-    setState("/appStatus", params.status);
-  },
-  removeItem: (params, { getState, setState }) => {
-    const idx = params.index as number;
-    const s = getState() as Record<string, unknown>;
-    const items = (s.items as unknown[] | undefined) ?? [];
-    setState("/items", items.filter((_, i) => i !== idx));
   },
 };

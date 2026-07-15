@@ -1,10 +1,21 @@
 // BasicCase.tsx — static spec rendering demo.
-import { Renderer } from "mini-render";
+import { useState } from "react";
+import { Link } from "wouter";
+import { Container, Breadcrumbs } from "@mantine/core";
+import { Renderer, createStore } from "mini-render";
 import basicSpec from "./spec.json";
-import { store } from "../../store";
-import { handlers } from "../../handlers";
 import { registry } from "./registry";
 
 export function BasicCase() {
-  return <Renderer spec={basicSpec} registry={registry} store={store} handlers={handlers} />;
+  const [store] = useState(() => createStore({}));
+
+  return (
+    <Container size="md" py="md">
+      <Breadcrumbs mb="md">
+        <Link href="/">Home</Link>
+        <span>Basic</span>
+      </Breadcrumbs>
+      <Renderer spec={basicSpec} registry={registry} store={store} />
+    </Container>
+  );
 }
