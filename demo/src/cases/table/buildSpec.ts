@@ -3,11 +3,19 @@ import type { Spec } from "mini-render";
 
 export function buildTableSpec(itemCount: number): Spec {
   return {
-    root: "table",
+    root: "container",
     elements: {
+      container: {
+        type: "CaseContainer",
+        props: {
+          title: `${itemCount}-Row HTML Table`,
+          description: "1,000-row HTML table with <thead>/<tbody> — demonstrates composing semantic HTML via repeat on <tr> elements.",
+        },
+        children: ["table"],
+      },
       table: {
         type: "Table",
-        props: { title: `${itemCount}-Row HTML Table` },
+        props: {},
         children: ["toggleBtn", "headerRow", "tableBody"],
       },
       toggleBtn: {

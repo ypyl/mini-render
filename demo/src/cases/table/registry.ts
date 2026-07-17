@@ -8,8 +8,9 @@ import { Td } from "../../components/table/Td";
 import { BoundField } from "../../components/BoundField";
 import { ActionButton } from "../../components/ActionButton";
 import { EditToggle } from "../../components/EditToggle";
+import { CaseContainer } from "../../components/CaseContainer";
 import type { Registry } from "mini-render";
 
 export const registry: Registry = {
-  Table, THead, TBody, Tr, Th, Td, BoundField, ActionButton, EditToggle,
+  CaseContainer, Table, THead, TBody, Tr, Th, Td, BoundField, ActionButton, EditToggle,
 };
