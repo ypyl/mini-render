@@ -51,6 +51,12 @@ const CASES = [
     title: "Two Store",
     description: "Two independent stores side by side — change settings on the left, click Apply to update the live preview on the right.",
   },
+  {
+    route: "/feature-flags",
+    emoji: "🚩",
+    title: "Feature Flags",
+    description: "Dashboard with toggle switches, rollout sliders, badges, and alerts — showcases five Mantine components in a single page.",
+  },
 ];
 
 export function HomePage() {
