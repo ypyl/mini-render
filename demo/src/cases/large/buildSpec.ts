@@ -6,8 +6,8 @@ export function buildLargeSpec(itemCount: number): Spec {
     root: "root",
     elements: {
       root: {
-        type: "Card",
-        props: { title: `${itemCount}-Row Editable Table (edit any cell)` },
+        type: "CaseContainer",
+        props: { title: `${itemCount}-Row Editable Table (edit any cell)`, description: "1,000-row repeat with inline-editable cells. Demonstrates granular per-path subscriptions at scale." },
         children: ["body"],
       },
       body: {

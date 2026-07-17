@@ -2,8 +2,8 @@
   "root": "card",
   "elements": {
     "card": {
-      "type": "Card",
-      "props": { "title": "Action Dispatch" },
+      "type": "CaseContainer",
+      "props": { "title": "Action Dispatch", "description": "Action dispatch with state feedback — button click saves a timestamp to the store." },
       "children": ["body"]
     },
     "body": {

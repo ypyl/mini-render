@@ -140,6 +140,8 @@ Renders `row` once per item in `/items`. Inside a repeat, components can use:
 - `useRepeatIndex()` — get the numeric index (`0`, `1`, etc.)
 - `useItemPath(expr)` — resolve `{ $item: "field" }` to the full path
 
+For stable React keys across re-renders, provide a `key` field on the repeat config pointing to a unique field on each item (e.g., `"repeat": { "path": "/items", "key": "id" }`). Without it, the array index is used, which breaks on reorder or delete. The unique ID must come from your data — mini-render does not auto-generate IDs.
+
 ## API
 
 ### `<Renderer>`

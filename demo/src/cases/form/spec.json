@@ -2,8 +2,8 @@
   "root": "card",
   "elements": {
     "card": {
-      "type": "Card",
-      "props": { "title": "Bound Editable Fields" },
+      "type": "CaseContainer",
+      "props": { "title": "Bound Editable Fields", "description": "Two-way bound editable fields with edit/save/cancel lifecycle via action handlers." },
       "children": ["toggleBtn", "name", "email"]
     },
     "toggleBtn": {

@@ -7,37 +7,37 @@ const CASES = [
     route: "/basic",
     emoji: "📄",
     title: "Basic",
-    description: "Static spec rendering — no state, no actions. The simplest possible Renderer usage.",
+    description: "Renders a static greeting from a JSON spec — demonstrates the Renderer component and type-driven element resolution.",
   },
   {
     route: "/form",
     emoji: "📝",
     title: "Form",
-    description: "Two-way bound editable fields with edit/save/cancel lifecycle via action handlers.",
+    description: "Editable fields with edit/save/cancel toggle — demonstrates useBound two-way bindings and on action handlers.",
   },
   {
     route: "/actions",
     emoji: "⚡",
     title: "Actions",
-    description: "Action dispatch with state feedback — button click saves a timestamp to the store.",
+    description: "Button click dispatches an action that writes to the store — demonstrates the emit action system and on.click handlers.",
   },
   {
     route: "/large",
     emoji: "📊",
     title: "Large",
-    description: "1,000-row repeat with inline-editable cells. Demonstrates granular per-path subscriptions at scale.",
+    description: "1,000-row repeat with inline-editable cells — demonstrates the repeat directive and granular per-path subscriptions at scale.",
   },
   {
     route: "/table",
     emoji: "📋",
     title: "Table",
-    description: "1,000-row HTML table with <thead>/<tbody> structure built via repeat.",
+    description: "1,000-row HTML table with <thead>/<tbody> — demonstrates composing semantic HTML via repeat on <tr> elements.",
   },
   {
     route: "/switch",
     emoji: "🔀",
     title: "Switch",
-    description: "Conditional rendering using useValue — renders different subtrees based on store state.",
+    description: "Toggle between loading, loaded, and error states — demonstrates the Switch component and conditional rendering with useValue.",
   },
 ];
 

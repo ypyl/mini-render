@@ -2,8 +2,8 @@
   "root": "card",
   "elements": {
     "card": {
-      "type": "Card",
-      "props": { "title": "Switch Demo" },
+      "type": "CaseContainer",
+      "props": { "title": "Switch Demo", "description": "Conditional rendering using useValue — renders different subtrees based on store state." },
       "children": ["buttons", "statusLabel", "switch"]
     },
     "buttons": {

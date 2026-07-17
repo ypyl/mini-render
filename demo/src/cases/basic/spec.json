@@ -2,8 +2,8 @@
   "root": "card",
   "elements": {
     "card": {
-      "type": "Card",
-      "props": { "title": "Basic Static Rendering" },
+      "type": "CaseContainer",
+      "props": { "title": "Basic Static Rendering", "description": "Static spec rendering — no state, no actions. The simplest possible Renderer usage." },
       "children": ["greeting"]
     },
     "greeting": {
