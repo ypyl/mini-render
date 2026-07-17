@@ -45,6 +45,12 @@ const CASES = [
     title: "Detail Modal",
     description: "Click a row to load details from a simulated backend — demonstrates interdependent state, async handlers, and the Modal component.",
   },
+  {
+    route: "/two-store",
+    emoji: "🪞",
+    title: "Two Store",
+    description: "Two independent stores side by side — change settings on the left, click Apply to update the live preview on the right.",
+  },
 ];
 
 export function HomePage() {

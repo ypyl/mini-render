@@ -206,7 +206,7 @@ npm test   # 31 pure-logic tests (store + actions), zero framework deps
 
 ## Demo
 
-The demo app (`demo/`) has seven self-contained cases:
+The demo app (`demo/`) has eight self-contained cases:
 
 | Case | What it shows |
 |-----|---------------|
@@ -217,6 +217,7 @@ The demo app (`demo/`) has seven self-contained cases:
 | **Table** | 1000-row HTML `<table>` with `<thead>`/`<tbody>` structure built via `repeat` |
 | **Switch** | Conditional rendering via `useValue` — three mutually-exclusive status views |
 | **Detail Modal** | Click a table row → async handler simulates backend call → detail data loads into a separate store path and displays in a Modal |
+| **Two Store** | Two stores, two Renderers side by side — settings panel changes update a live preview only on Apply via a cross-store handler |
 
 ## vs json-render
 
