@@ -39,6 +39,12 @@ const CASES = [
     title: "Switch",
     description: "Toggle between loading, loaded, and error states — demonstrates the Switch component and conditional rendering with useValue.",
   },
+  {
+    route: "/detail-modal",
+    emoji: "🔍",
+    title: "Detail Modal",
+    description: "Click a row to load details from a simulated backend — demonstrates interdependent state, async handlers, and the Modal component.",
+  },
 ];
 
 export function HomePage() {

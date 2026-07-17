@@ -8,6 +8,7 @@ import { ActionsCase } from "./cases/actions/ActionsCase";
 import { LargeCase } from "./cases/large/LargeCase";
 import { TableCase } from "./cases/table/TableCase";
 import { SwitchCase } from "./cases/switch/SwitchCase";
+import { DetailModalCase } from "./cases/detail-modal/DetailModalCase";
 
 export function App() {
   return (
@@ -20,6 +21,7 @@ export function App() {
         <Route path="/large" component={LargeCase} />
         <Route path="/table" component={TableCase} />
         <Route path="/switch" component={SwitchCase} />
+        <Route path="/detail-modal" component={DetailModalCase} />
         <Route>
           <Container py="xl">
             <Title order={3} mb="md">404 — Page not found</Title>
