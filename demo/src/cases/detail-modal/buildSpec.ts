@@ -72,18 +72,14 @@ export function buildDetailModalSpec(): Spec {
       modalBody: {
         type: "StackRow",
         props: { gap: "md" },
-        children: ["loadingSwitch"],
+        children: ["detailArea"],
       },
-      loadingSwitch: {
-        type: "Switch",
+      detailArea: {
+        type: "LoadingBox",
         props: { path: "/loadingDetail" },
-        children: ["true", "false"],
+        children: ["detailContent"],
       },
-      "true": {
-        type: "StaticText",
-        props: { text: "⏳ Loading details..." },
-      },
-      "false": {
+      detailContent: {
         type: "StackRow",
         props: { gap: "sm" },
         children: ["revenueRow", "employeesRow", "foundedRow", "hqRow", "closeBtn"],

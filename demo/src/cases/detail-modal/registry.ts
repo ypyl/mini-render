@@ -9,11 +9,10 @@ import { Td } from "../../components/table/Td";
 import { BoundField } from "../../components/BoundField";
 import { ActionButton } from "../../components/ActionButton";
 import { Modal } from "../../components/Modal";
-import { Switch } from "../../components/Switch";
-import { StaticText } from "../../components/StaticText";
+import { LoadingBox } from "../../components/LoadingBox";
 import { StackRow } from "../../components/StackRow";
 import type { Registry } from "mini-render";
 
 export const registry: Registry = {
-  CaseContainer, Table, THead, TBody, Tr, Th, Td, BoundField, ActionButton, Modal, Switch, StaticText, StackRow,
+  CaseContainer, Table, THead, TBody, Tr, Th, Td, BoundField, ActionButton, Modal, LoadingBox, StackRow,
 };

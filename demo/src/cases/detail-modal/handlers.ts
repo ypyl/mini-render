@@ -20,6 +20,7 @@ export const handlers: Handlers = {
     const idPath = params.id as string;
     const id = getByPath(getState(), idPath) as string;
     setState("/loadingDetail", "true");
+    setState("/itemDetail", {}); // open modal immediately
     await new Promise((r) => setTimeout(r, 600));
     const detail = DETAILS[id] ?? { revenue: "N/A", employees: 0, founded: 0, headquarters: "Unknown" };
     setState("/itemDetail", detail);
