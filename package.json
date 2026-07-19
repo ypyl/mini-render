@@ -3,11 +3,38 @@
   "version": "0.1.0",
   "description": "Minimal spec-driven React UI renderer with granular per-path subscriptions.",
   "type": "module",
-  "main": "src/index.ts",
-  "scripts": {
-    "test": "vitest run",
-    "coverage": "vitest run --coverage"
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
   },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "coverage": "vitest run --coverage",
+    "prepublishOnly": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ypyl/mini-render.git"
+  },
+  "keywords": [
+    "react",
+    "renderer",
+    "spec-driven",
+    "ui",
+    "declarative",
+    "json-spec"
+  ],
+  "license": "MIT",
   "peerDependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
