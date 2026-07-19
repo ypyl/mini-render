@@ -11,6 +11,7 @@ import { SwitchCase } from "./cases/switch/SwitchCase";
 import { DetailModalCase } from "./cases/detail-modal/DetailModalCase";
 import { TwoStoreCase } from "./cases/two-store/TwoStoreCase";
 import { FeatureFlagsCase } from "./cases/feature-flags/FeatureFlagsCase";
+import { TranslationsCase } from "./cases/translations/TranslationsCase";
 
 export function App() {
   return (
@@ -26,6 +27,7 @@ export function App() {
         <Route path="/detail-modal" component={DetailModalCase} />
         <Route path="/two-store" component={TwoStoreCase} />
         <Route path="/feature-flags" component={FeatureFlagsCase} />
+        <Route path="/translations" component={TranslationsCase} />
         <Route>
           <Container py="xl">
             <Title order={3} mb="md">404 — Page not found</Title>

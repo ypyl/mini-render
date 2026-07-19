@@ -1,5 +1,6 @@
-## ADDED Requirements
-
+## Purpose
+The Renderer module resolves spec element types against a component registry, renders children in spec order, provides repeat iteration over arrays and plain objects, and supplies stable emit closures for action dispatch — all while minimizing re-renders through memoization and targeted state subscriptions.
+## Requirements
 ### Requirement: Renderer resolves element types via a registry
 The `<Renderer spec registry store? handlers? />` component SHALL walk the spec starting at `spec.root`, resolve each element's `type` against the `registry` map, and render the matched component. When no component is registered for `type`, `Renderer` SHALL render nothing and log a warning.
 
@@ -28,16 +29,38 @@ When an element declares `children: [k1, k2, ...]`, `Renderer` SHALL render each
 - **WHEN** an element has `children: ["b", "a"]`
 - **THEN** child `b` is rendered before child `a`
 
-### Requirement: RepeatChildren subscribes only to the array path
-For an element with a `repeat` field, `RepeatChildren` SHALL read the array via a single `useValue` call on `repeat.path`. It MUST NOT subscribe to any deeper path. Each repeated child is wrapped in a scope that sets `${repeat.path}/${index}` as the relevant base path for descendant binding components. Because structural sharing replaces the array container on a deep leaf set, `RepeatChildren` MAY re-run its `.map` when a descendant path changes — this is cheap (it only re-creates React element descriptors) and does NOT re-render the row components, which are gated by memoized `ElementRenderer` wrappers and per-cell `useValue` subscriptions.
+### Requirement: RepeatChildren subscribes only to the iterable path
+For an element with a `repeat` field, `RepeatChildren` SHALL read the value at `repeat.path` via a single `useValue` call. It MUST NOT subscribe to any deeper path.
+
+When the value is an array (`Array.isArray`), `RepeatChildren` SHALL iterate via `.map()` with the numeric index, exactly as before.
+
+When the value is a plain object (non-null, non-array, `typeof === "object"`), `RepeatChildren` SHALL iterate via `Object.entries()`. Each entry SHALL produce a scope with:
+- `RepeatPathContext` set to `${repeat.path}/${objectKey}`
+- `RepeatIndexContext` set to the numeric position (0, 1, 2, …)
+
+When the value is neither an array nor a plain object, `RepeatChildren` SHALL render nothing.
+
+Each repeated child is wrapped in a scope that sets `${repeat.path}/${indexOrKey}` as the relevant base path for descendant binding components. Because structural sharing replaces the container on a deep leaf set, `RepeatChildren` MAY re-run its iteration when a descendant path changes — this is cheap (it only re-creates React element descriptors) and does NOT re-render the row components, which are gated by memoized `ElementRenderer` wrappers and per-cell `useValue` subscriptions.
 
 #### Scenario: Editing one cell re-renders only that cell component
 - **WHEN** a 1000-row table is rendered via `RepeatChildren`, and `/items/0/name` changes
-- **THEN** the binding component subscribed to `/items/0/name` re-renders; the other 999 rows' binding components do NOT re-render (their per-cell `useValue` snapshots are unchanged and their `ElementRenderer` wrappers are memoized with stable props)
+- **THEN** the binding component subscribed to `/items/0/name` re-renders; the other 999 rows' binding components do NOT re-render
 
 #### Scenario: Adding an item re-renders the list
 - **WHEN** the array at `/items` is replaced with a longer array (new array object)
 - **THEN** `RepeatChildren` re-renders to map over the new length
+
+#### Scenario: Object iteration renders one child per key
+- **WHEN** the store has `{ settings: { theme: "dark", lang: "en" } }` and a repeat element has `path: "/settings"`
+- **THEN** two children are rendered: one with `RepeatPathContext` at `/settings/theme` and index 0, another at `/settings/lang` and index 1
+
+#### Scenario: Object iteration with repeat.key extracts from value
+- **WHEN** the store has `{ widgets: { a: { label: "Foo" }, b: { label: "Bar" } } }` and a repeat element has `path: "/widgets"` with `key: "label"`
+- **THEN** React keys `"Foo"` and `"Bar"` are used; if `repeat.key` is undefined, React keys `"a"` and `"b"` are used
+
+#### Scenario: Non-iterable value renders nothing
+- **WHEN** the value at `repeat.path` is `"string"`, `42`, `null`, or `undefined`
+- **THEN** `RepeatChildren` renders nothing (empty fragment)
 
 ### Requirement: Renderer provides stable emit per element
 For each element with an `on` field, `ElementRenderer` SHALL build a stable `emit(name)` closure (stable across renders when `element.on` and the `ActionContext` are unchanged) that the rendered component invokes to dispatch actions.
@@ -45,3 +68,4 @@ For each element with an `on` field, `ElementRenderer` SHALL build a stable `emi
 #### Scenario: emit identity stable across re-renders
 - **WHEN** the same element re-renders for unrelated reasons with the same `on` and same `ActionContext` reference
 - **THEN** the `emit` function passed to the component is referentially identical
+

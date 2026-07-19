@@ -57,6 +57,12 @@ const CASES = [
     title: "Feature Flags",
     description: "Dashboard with toggle switches, rollout sliders, badges, and alerts — showcases five Mantine components in a single page.",
   },
+  {
+    route: "/translations",
+    emoji: "🌐",
+    title: "Translations",
+    description: "Editable translation strings using repeat on a plain object — demonstrates object key iteration and in-place value editing.",
+  },
 ];
 
 export function HomePage() {

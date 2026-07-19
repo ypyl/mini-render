@@ -262,4 +262,78 @@ describe("RepeatChildren", () => {
     // Only the list, no rows since path is missing
     expect(Spy.called).toHaveLength(1);
   });
+
+  // ── Object repeat ──
+
+  it("renders children once per object key", () => {
+    const store = createStore({ settings: { theme: "dark", lang: "en", notif: true } });
+    const Spy = makeSpy();
+    const registry: Registry = { Spy };
+    const spec: Spec = {
+      root: "list",
+      elements: {
+        list: { type: "Spy", repeat: { path: "/settings" }, children: ["row"] },
+        row: { type: "Spy", props: {} },
+      },
+    };
+
+    render(<Renderer spec={spec} registry={registry} store={store} />);
+
+    // 1 list + 3 rows (theme, lang, notif) = 4 renders
+    expect(Spy.called).toHaveLength(4);
+  });
+
+  it("uses repeat.key to extract from object values", () => {
+    const store = createStore({ widgets: { a: { label: "Foo" }, b: { label: "Bar" } } });
+    const Spy = makeSpy();
+    const registry: Registry = { Spy };
+    const spec: Spec = {
+      root: "list",
+      elements: {
+        list: { type: "Spy", repeat: { path: "/widgets", key: "label" }, children: ["row"] },
+        row: { type: "Spy" },
+      },
+    };
+
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    render(<Renderer spec={spec} registry={registry} store={store} />);
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
+  });
+
+  it("falls back to object key when repeat.key is undefined or missing on values", () => {
+    const store = createStore({ flags: { darkMode: true, beta: false } });
+    const Spy = makeSpy();
+    const registry: Registry = { Spy };
+    const spec: Spec = {
+      root: "list",
+      elements: {
+        list: { type: "Spy", repeat: { path: "/flags", key: "id" }, children: ["row"] },
+        row: { type: "Spy" },
+      },
+    };
+
+    render(<Renderer spec={spec} registry={registry} store={store} />);
+
+    // 1 list + 2 rows (still renders with object-key fallback)
+    expect(Spy.called).toHaveLength(3);
+  });
+
+  it("renders nothing for non-iterable value", () => {
+    const store = createStore({ value: "hello" });
+    const Spy = makeSpy();
+    const registry: Registry = { Spy };
+    const spec: Spec = {
+      root: "list",
+      elements: {
+        list: { type: "Spy", repeat: { path: "/value" }, children: ["row"] },
+        row: { type: "Spy" },
+      },
+    };
+
+    render(<Renderer spec={spec} registry={registry} store={store} />);
+
+    // Only the list container, no rows (string is not iterable)
+    expect(Spy.called).toHaveLength(1);
+  });
 });

@@ -22,7 +22,7 @@ import { getByPath } from "./store";
 // ── Repeat scope contexts (used by renderer + hooks) ──────────────
 
 export const RepeatPathContext = createContext<string>("");
-export const RepeatIndexContext = createContext<number | undefined>(undefined);
+export const RepeatIndexContext = createContext<string | number | undefined>(undefined);
 
 /** Hook for descendant components to get parent repeat's base path. */
 export function useRepeatPath(): string {
@@ -30,7 +30,7 @@ export function useRepeatPath(): string {
 }
 
 /** Hook for descendant components to get parent repeat's numeric index. */
-export function useRepeatIndex(): number | undefined {
+export function useRepeatIndex(): string | number | undefined {
   return useContext(RepeatIndexContext);
 }
 
@@ -87,7 +87,7 @@ export function resolveParams(
   params: Record<string, unknown>,
   getState: () => unknown,
   repeatBasePath?: string,
-  repeatIndex?: number,
+  repeatIndex?: string | number,
 ): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   for (const [key, val] of Object.entries(params)) {

@@ -115,7 +115,7 @@ interface RepeatChildrenProps {
   loading?: boolean;
 }
 
-/** Renders childKeys once per item in the state array at repeat.path. */
+/** Renders childKeys once per item in the state array or object at repeat.path. */
 function RepeatChildren({
   repeat,
   childKeys,
@@ -123,37 +123,72 @@ function RepeatChildren({
   registry,
   loading,
 }: RepeatChildrenProps) {
-  const items = useValue<unknown[]>(repeat.path) ?? [];
+  const value = useValue<unknown>(repeat.path);
 
-  return (
-    <>
-      {items.map((item, index) => {
-        const itemObj = item as Record<string, unknown> | undefined;
-        const rawKey = repeat.key && itemObj ? itemObj[repeat.key] : undefined;
-        const key = rawKey != null && rawKey !== "" ? String(rawKey) : String(index);
-        const basePath = `${repeat.path}/${index}`;
+  // Array iteration
+  if (Array.isArray(value)) {
+    return (
+      <>
+        {value.map((item, index) => {
+          const itemObj = item as Record<string, unknown> | undefined;
+          const rawKey = repeat.key && itemObj ? itemObj[repeat.key] : undefined;
+          const key = rawKey != null && rawKey !== "" ? String(rawKey) : String(index);
+          const basePath = `${repeat.path}/${index}`;
 
-        return (
-          <RepeatScope key={key} path={basePath} index={index}>
-            {childKeys.map((childKey) => (
-              <_ElementRenderer
-                key={childKey}
-                elementKey={childKey}
-                spec={spec}
-                registry={registry}
-                loading={loading}
-              />
-            ))}
-          </RepeatScope>
-        );
-      })}
-    </>
-  );
+          return (
+            <RepeatScope key={key} path={basePath} index={index}>
+              {childKeys.map((childKey) => (
+                <_ElementRenderer
+                  key={childKey}
+                  elementKey={childKey}
+                  spec={spec}
+                  registry={registry}
+                  loading={loading}
+                />
+              ))}
+            </RepeatScope>
+          );
+        })}
+      </>
+    );
+  }
+
+  // Object iteration
+  if (value !== null && typeof value === "object") {
+    const entries = Object.entries(value as Record<string, unknown>);
+    return (
+      <>
+        {entries.map(([objKey, val], index) => {
+          const valObj = val as Record<string, unknown> | undefined;
+          const rawKey = repeat.key && valObj ? valObj[repeat.key] : undefined;
+          const key = rawKey != null && rawKey !== "" ? String(rawKey) : objKey;
+          const basePath = `${repeat.path}/${objKey}`;
+
+          return (
+            <RepeatScope key={key} path={basePath} index={index}>
+              {childKeys.map((childKey) => (
+                <_ElementRenderer
+                  key={childKey}
+                  elementKey={childKey}
+                  spec={spec}
+                  registry={registry}
+                  loading={loading}
+                />
+              ))}
+            </RepeatScope>
+          );
+        })}
+      </>
+    );
+  }
+
+  // Non-iterable: render nothing
+  return null;
 }
 
 // ── RepeatScope (lightweight contexts: base path + index) ─────────
 
-function RepeatScope({ path, index, children }: { path: string; index: number; children: ReactNode }) {
+function RepeatScope({ path, index, children }: { path: string; index: string | number; children: ReactNode }) {
   return (
     <RepeatPathContext.Provider value={path}>
       <RepeatIndexContext.Provider value={index}>

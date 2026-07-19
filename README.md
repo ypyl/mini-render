@@ -206,7 +206,7 @@ npm test   # 31 pure-logic tests (store + actions), zero framework deps
 
 ## Demo
 
-The demo app (`demo/`) has nine self-contained cases:
+The demo app (`demo/`) has ten self-contained cases:
 
 | Case | What it shows |
 |-----|---------------|
@@ -219,6 +219,7 @@ The demo app (`demo/`) has nine self-contained cases:
 | **Detail Modal** | Click a table row → async handler simulates backend call → detail data loads into a separate store path and displays in a Modal |
 | **Two Store** | Two stores, two Renderers side by side — settings panel changes update a live preview only on Apply via a cross-store handler |
 | **Feature Flags** | Dashboard with ToggleField, SliderField, Badge, Alert, and SegmentedField — showcases five Mantine-derived components |
+| **Translations** | Editable translation strings via repeat on a plain object — demonstrates object key iteration with PathLabel and BoundField |
 
 ## vs json-render
 
