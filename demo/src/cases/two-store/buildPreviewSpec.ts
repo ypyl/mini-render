@@ -10,6 +10,7 @@ export function buildPreviewSpec(): Spec {
         props: {
           title: "Live Preview",
           description: "Preview updates only when you click Apply.",
+          technicalDescription: "Spec\nCaseContainer → PreviewBox\nState\n{ preview: { title, color, size } }\nFeatures\n• Two Renderers — side-by-side independent spec rendering\n• PreviewBox — renders preview content from store state\n• Cross-store communication — updated by settings panel handler",
         },
         children: ["preview"],
       },

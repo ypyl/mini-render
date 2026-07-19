@@ -29,6 +29,7 @@ export function buildDetailModalSpec(): Spec {
         props: {
           title: "Detail Modal Demo",
           description: "Click a row to load item details from a simulated backend — demonstrates interdependent state, async handlers, and the Modal component.",
+          technicalDescription: "Spec\nCaseContainer → [Table(repeat: /items) → THead + TBody → Tr → [BoundField×3, ActionButton(\"Details\")], Modal(path: \"/itemDetail\") → LoadingBox(path: \"/loadingDetail\") → StackRow → [BoundField×4, ActionButton(\"Close\")]]\nState\n{ items: Item[], loadingDetail: \"false\", itemDetail: {} }\nFeatures\n• repeat — array iteration in a table\n• Action dispatch — $item passes row data to async handlers\n• Async handlers — simulated backend fetch with timeout\n• Modal — overlay component gated by store path\n• LoadingBox — conditional loading overlay\n• Interdependent state — modal, loading, and detail share store paths",
         },
         children: ["table", "modal"],
       },

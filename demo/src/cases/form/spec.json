@@ -3,7 +3,7 @@
   "elements": {
     "card": {
       "type": "CaseContainer",
-      "props": { "title": "Bound Editable Fields", "description": "Two-way bound editable fields with edit/save/cancel lifecycle via action handlers." },
+      "props": { "title": "Bound Editable Fields", "description": "Two-way bound editable fields with edit/save/cancel lifecycle via action handlers.", "technicalDescription": "Spec\nCaseContainer → [EditToggle, BoundField(bind: \"name\"), BoundField(bind: \"email\")]\nState\n{} initially; at runtime: editingSection, _snapshot, name, email\nFeatures\n• BoundField — two-way binding with inline editing\n• EditToggle — edit/save/cancel lifecycle via action handlers\n• Action handlers — getState, setState with arbitrary paths\n• structuredClone — snapshot-based cancel/revert pattern" },
       "children": ["toggleBtn", "name", "email"]
     },
     "toggleBtn": {

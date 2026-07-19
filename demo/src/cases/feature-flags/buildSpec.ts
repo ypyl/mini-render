@@ -10,6 +10,7 @@ export function buildDashboardSpec(): Spec {
         props: {
           title: "Feature Flags Dashboard",
           description: "Toggle features, set rollout percentages, and switch environments — demonstrates five new Mantine-derived components in a single dashboard.",
+          technicalDescription: "Spec\nCaseContainer → StackRow → [Alert, SegmentedField(bind: \"/environment\"), 3×FieldsetRow with ToggleField + Badge + SliderField]\nState\n{ environment: string, flags: { darkMode: bool, betaDashboard: bool, aiSuggestions: { enabled: bool, rollout: number } } }\nFeatures\n• ToggleField — boolean store binding\n• SliderField — numeric binding with min/max\n• SegmentedField — enum binding with labeled options\n• Badge, Alert — static display components\n• FieldsetRow — grouped layout wrapper\n• Nested paths — flags.aiSuggestions.enabled, flags.aiSuggestions.rollout",
         },
         children: ["content"],
       },

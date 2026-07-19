@@ -3,7 +3,7 @@
   "elements": {
     "card": {
       "type": "CaseContainer",
-      "props": { "title": "Switch Demo", "description": "Conditional rendering using useValue — renders different subtrees based on store state." },
+      "props": { "title": "Switch Demo", "description": "Conditional rendering using useValue — renders different subtrees based on store state.", "technicalDescription": "Spec\nCaseContainer → [ButtonGroup → [ActionButton×3], BoundField(bind: \"/appStatus\"), Switch(path: \"/appStatus\") → loading|loaded|error subtrees]\nState\n{} initially; at runtime: appStatus (\"loading\" | \"loaded\" | \"error\")\nFeatures\n• Switch — conditional rendering via useValue on store path\n• Action dispatch — setStatus handler with params\n• ButtonGroup — horizontal button layout\n• Multiple subtrees — different children per state branch" },
       "children": ["buttons", "statusLabel", "switch"]
     },
     "buttons": {

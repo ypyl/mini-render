@@ -10,6 +10,7 @@ export function buildSettingsSpec(): Spec {
         props: {
           title: "Settings",
           description: "Change the values below and click Apply to update the preview.",
+          technicalDescription: "Spec\nCaseContainer → StackRow → [BoundField(bind: \"settings/title\"), SelectField(bind: \"settings/color\"), SelectField(bind: \"settings/size\"), ActionButton(\"Apply\")]\nState\n{ settings: { title, color, size }, editingSection: true }\nFeatures\n• Multiple stores — two independent createStore instances\n• Cross-store handler — applySettings reads store A, writes store B via storeB.set\n• SelectField — enum-style dropdown binding\n• BoundField — text binding with nested path",
         },
         children: ["fields"],
       },
