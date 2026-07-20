@@ -1,12 +1,22 @@
 // DndTable.tsx — generic sortable table wrapper providing DndContext + SortableContext.
 //
-// NOTE: This component iterates items internally with .map() rather than using
-// mini-render's `repeat` directive. @dnd-kit requires that SortableContext and
-// useSortable be in the same React render pass. `repeat` renders via
-// RepeatChildren/ElementRenderer in a separate pass, which desynchronizes
-// @dnd-kit's animation cycle and causes a double-move visual glitch.
-// This is a known limitation of combining external DnD libraries with the
-// spec-driven repeat model.
+// NOTE 1 (internal .map vs repeat): This component iterates items internally
+// with .map() rather than using mini-render's `repeat` directive. @dnd-kit
+// requires that SortableContext and useSortable be in the same React render
+// pass. `repeat` renders via RepeatChildren/ElementRenderer in a separate
+// pass, which desynchronizes @dnd-kit's animation cycle and causes a
+// double-move visual glitch. This is a known limitation of combining
+// external DnD libraries with the spec-driven repeat model.
+//
+// NOTE 2 (inline handlers vs handlers.ts): Edit/Save/Cancel logic lives
+// inline rather than in a handlers.ts file (unlike Form/Large/Table demos).
+// DndTable must hold items in local React state so @dnd-kit can batch
+// updates — subscribing to the store's items array causes re-renders on
+// every cell edit (structural sharing), which resets TextInput cursor
+// positions. Because local state is the single source of truth rather
+// than the store, handler-based edit/save/cancel would require
+// bidirectional sync (store → local) that re-introduces the subscription
+// problem. The inline approach is architecturally necessary, not a shortcut.
 import { useMemo, useRef, useState } from "react";
 import { useValue, useSetValue, useStore, getByPath, type ComponentProps } from "mini-render";
 import {
