@@ -6,13 +6,10 @@ import { Renderer, createStore } from "mini-render";
 import { registry } from "./registry";
 import { buildDndTableSpec } from "./buildSpec";
 
-const INITIAL_ITEMS = [
-  { name: "Alice", email: "alice@example.com" },
-  { name: "Bob", email: "bob@example.com" },
-  { name: "Charlie", email: "charlie@example.com" },
-  { name: "Diana", email: "diana@example.com" },
-  { name: "Eve", email: "eve@example.com" },
-];
+const INITIAL_ITEMS = Array.from({ length: 150 }, (_, i) => ({
+  name: `User ${i}`,
+  email: `user${i}@example.com`,
+}));
 
 export function DndTableCase() {
   const [store] = useState(() => createStore({ items: INITIAL_ITEMS, editingSection: true }));

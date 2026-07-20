@@ -17,6 +17,16 @@
 // than the store, handler-based edit/save/cancel would require
 // bidirectional sync (store → local) that re-introduces the subscription
 // problem. The inline approach is architecturally necessary, not a shortcut.
+//
+// NOTE 3 (large-list drag latency): With ~150 items, a small activation
+// delay occurs when starting a drag. @dnd-kit propagates drag state changes
+// via React context (DndContext/SortableContext), which triggers re-renders
+// for all useSortable consumers. React.memo cannot help — context changes
+// bypass memoization. This is an inherent @dnd-kit limitation, not a
+// mini-render issue. MeasuringStrategy changes (WhileDragging vs
+// BeforeDragging) don't help because the bottleneck is context propagation,
+// not DOM measurement. At 50 items the delay is imperceptible; at 150 it's
+// noticeable but acceptable for a demo.
 import { useMemo, useRef, useState } from "react";
 import { useValue, useSetValue, useStore, getByPath, type ComponentProps } from "mini-render";
 import {
