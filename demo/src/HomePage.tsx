@@ -63,6 +63,12 @@ const CASES = [
     title: "Translations",
     description: "Editable translation strings using repeat on a plain object — demonstrates object key iteration and in-place value editing.",
   },
+  {
+    route: "/dnd-table",
+    emoji: "↕️",
+    title: "Drag & Drop",
+    description: "Sortable table with drag-and-drop row reordering, add, and remove — powered by @dnd-kit with the store as source of truth.",
+  },
 ];
 
 export function HomePage() {

@@ -206,7 +206,7 @@ npm test   # 31 pure-logic tests (store + actions), zero framework deps
 
 ## Demo
 
-The demo app (`demo/`) has ten self-contained cases:
+The demo app (`demo/`) has eleven self-contained cases:
 
 | Case | What it shows |
 |-----|---------------|
@@ -220,6 +220,7 @@ The demo app (`demo/`) has ten self-contained cases:
 | **Two Store** | Two stores, two Renderers side by side — settings panel changes update a live preview only on Apply via a cross-store handler |
 | **Feature Flags** | Dashboard with ToggleField, SliderField, Badge, Alert, and SegmentedField — showcases five Mantine-derived components |
 | **Translations** | Editable translation strings via repeat on a plain object — demonstrates object key iteration with PathLabel and BoundField |
+| **Drag & Drop** | Sortable table with drag-and-drop reordering, add, and remove — powered by @dnd-kit with the store as source of truth |
 
 ## vs json-render
 
