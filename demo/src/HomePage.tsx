@@ -69,6 +69,12 @@ const CASES = [
     title: "Drag & Drop",
     description: "Sortable table with drag-and-drop row reordering, add, and remove — powered by @dnd-kit with the store as source of truth.",
   },
+  {
+    route: "/watch-validation",
+    emoji: "✅",
+    title: "Watch Validation",
+    description: "Live validation as you type — the watch directive fires a handler on every store change without re-rendering.",
+  },
 ];
 
 export function HomePage() {

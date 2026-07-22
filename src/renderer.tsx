@@ -11,10 +11,12 @@ import {
   type ComponentType,
   memo,
   createElement,
+  useContext,
+  useEffect,
 } from "react";
-import type { Spec, UIElement, OnMap, RepeatConfig } from "./spec";
-import { useValue, useEmit, RepeatPathContext, RepeatIndexContext } from "./hooks";
-import { StoreProvider, ActionProvider, BUILTIN_SET_STATE } from "./contexts";
+import type { Spec, UIElement, OnMap, WatchMap, RepeatConfig } from "./spec";
+import { useValue, useEmit, useStore, resolveParams, RepeatPathContext, RepeatIndexContext } from "./hooks";
+import { StoreProvider, ActionProvider, ActionContext, BUILTIN_SET_STATE } from "./contexts";
 import type { Store } from "./store";
 import type { Handlers } from "./contexts";
 
@@ -66,6 +68,9 @@ const _ElementRenderer = memo(function ElementRenderer({
 
   // Stable emit for this element's on bindings.
   const emit = useEmit(on);
+
+  // ── Watch subscriptions (no re-render, pure action dispatch) ──
+  useWatch(element.watch);
 
   // ── Children ──
   let children: ReactNode = null;
@@ -196,6 +201,47 @@ function RepeatScope({ path, index, children }: { path: string; index: string | 
       </RepeatIndexContext.Provider>
     </RepeatPathContext.Provider>
   );
+}
+
+// ── useWatch (subscribe without re-render) ────────────────────────
+
+function useWatch(watch?: WatchMap) {
+  const store = useStore();
+  const actionCtx = useContext(ActionContext);
+
+  // Capture repeat scope at element position (same as useEmit)
+  const repeatPath = useContext(RepeatPathContext);
+  const repeatIdx = useContext(RepeatIndexContext);
+
+  useEffect(() => {
+    if (!watch || !actionCtx) return;
+
+    const cleanups: (() => void)[] = [];
+
+    for (const [path, bindings] of Object.entries(watch)) {
+      const unsub = store.subscribe(path, () => {
+        for (const b of bindings) {
+          const handler = actionCtx.handlers[b.action];
+          if (!handler) {
+            console.warn(
+              `mini-render: no handler registered for watch action "${b.action}"`,
+            );
+            continue;
+          }
+          const resolved = b.params
+            ? resolveParams(b.params, actionCtx.getState, repeatPath, repeatIdx)
+            : {};
+          handler(resolved, {
+            getState: actionCtx.getState,
+            setState: actionCtx.setState,
+          });
+        }
+      });
+      cleanups.push(unsub);
+    }
+
+    return () => cleanups.forEach((fn) => fn());
+  }, [watch, store, actionCtx, repeatPath, repeatIdx]);
 }
 
 // ── Public Renderer ────────────────────────────────────────────────

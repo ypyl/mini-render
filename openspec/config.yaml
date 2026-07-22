@@ -1,20 +1,25 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  **Project:** mini-render — a minimal spec-driven React UI renderer with granular per-path subscriptions.
+  **Tech stack:** TypeScript, React 19, Vitest, Mantine v9 (demo), Vite (demo).
+  **Library:** Pure logic in src/ (store, hooks, renderer, contexts). Demo app in demo/.
+  **Testing:** 100% coverage enforced (vitest config `thresholds: { lines: 100, branches: 100, functions: 100, statements: 100 }`).
+  **Conventions:** Use SHALL/MUST for spec requirements. Every requirement needs at least one `#### Scenario:` block. Demo components in `demo/src/components/` should be reusable/universal not single-use. Follow existing patterns before inventing new ones.
+  **Publishing:** npm package `@ypyl/mini-render`. Tag-triggered publish workflow via GitHub Actions. Do not change the package name without discussion.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+rules:
+  proposal:
+    - Check `openspec/specs/` for existing spec names before filling Capabilities
+    - Each capability listed in Capabilities needs a corresponding delta spec file
+    - Mark breaking changes with **BREAKING**
+  specs:
+    - Use SHALL/MUST for normative requirements (avoid should/may)
+    - Every requirement MUST have at least one `#### Scenario:` block with WHEN/THEN
+    - For MODIFIED requirements, copy the ENTIRE original block then edit
+  design:
+    - Include "Decisions" section with rationale (why X over Y?)
+    - Include "Risks / Trade-offs" section
+  tasks:
+    - Always include a verification section with "Run `npm run coverage` to verify 100% coverage is maintained"
+    - Run `npm test` before marking implementation complete

@@ -13,6 +13,7 @@ import { TwoStoreCase } from "./cases/two-store/TwoStoreCase";
 import { FeatureFlagsCase } from "./cases/feature-flags/FeatureFlagsCase";
 import { TranslationsCase } from "./cases/translations/TranslationsCase";
 import { DndTableCase } from "./cases/dnd-table/DndTableCase";
+import { WatchValidationCase } from "./cases/watch-validation/WatchValidationCase";
 
 export function App() {
   return (
@@ -30,6 +31,7 @@ export function App() {
         <Route path="/feature-flags" component={FeatureFlagsCase} />
         <Route path="/translations" component={TranslationsCase} />
         <Route path="/dnd-table" component={DndTableCase} />
+        <Route path="/watch-validation" component={WatchValidationCase} />
         <Route>
           <Container py="xl">
             <Title order={3} mb="md">404 — Page not found</Title>

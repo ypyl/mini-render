@@ -2,6 +2,7 @@ export type {
   UIElement,
   ActionBinding,
   OnMap,
+  WatchMap,
   RepeatConfig,
   Spec,
 } from "./spec";
