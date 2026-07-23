@@ -1,5 +1,5 @@
 // Th.tsx — HTML th element.
-import type { ComponentProps } from "mini-render";
+import type { ComponentProps } from "micro-render";
 
 export function Th({ element }: ComponentProps) {
   return (

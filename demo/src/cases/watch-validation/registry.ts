@@ -3,7 +3,7 @@ import { CaseContainer } from "../../components/CaseContainer";
 import { BoundField } from "../../components/BoundField";
 import { ErrorDisplay } from "../../components/ErrorDisplay";
 import { StackRow } from "../../components/StackRow";
-import type { Registry } from "mini-render";
+import type { Registry } from "micro-render";
 
 export const registry: Registry = {
   CaseContainer,

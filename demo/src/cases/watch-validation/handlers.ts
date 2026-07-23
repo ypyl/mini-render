@@ -1,5 +1,5 @@
 // watch-validation/handlers.ts — validation handler for watch demo.
-import type { Handlers } from "mini-render";
+import type { Handlers } from "micro-render";
 
 export const handlers: Handlers = {
   validateName: (_params, { getState, setState }) => {

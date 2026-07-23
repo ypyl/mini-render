@@ -1,5 +1,5 @@
 // two-store/buildPreviewSpec.ts — preview panel spec.
-import type { Spec } from "mini-render";
+import type { Spec } from "micro-render";
 
 export function buildPreviewSpec(): Spec {
   return {

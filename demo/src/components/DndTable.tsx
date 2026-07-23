@@ -1,7 +1,7 @@
 // DndTable.tsx — generic sortable table wrapper providing DndContext + SortableContext.
 //
 // NOTE 1 (internal .map vs repeat): This component iterates items internally
-// with .map() rather than using mini-render's `repeat` directive. @dnd-kit
+// with .map() rather than using micro-render's `repeat` directive. @dnd-kit
 // requires that SortableContext and useSortable be in the same React render
 // pass. `repeat` renders via RepeatChildren/ElementRenderer in a separate
 // pass, which desynchronizes @dnd-kit's animation cycle and causes a
@@ -23,12 +23,12 @@
 // via React context (DndContext/SortableContext), which triggers re-renders
 // for all useSortable consumers. React.memo cannot help — context changes
 // bypass memoization. This is an inherent @dnd-kit limitation, not a
-// mini-render issue. MeasuringStrategy changes (WhileDragging vs
+// micro-render issue. MeasuringStrategy changes (WhileDragging vs
 // BeforeDragging) don't help because the bottleneck is context propagation,
 // not DOM measurement. At 50 items the delay is imperceptible; at 150 it's
 // noticeable but acceptable for a demo.
 import { useMemo, useRef, useState } from "react";
-import { useValue, useSetValue, useStore, getByPath, type ComponentProps } from "mini-render";
+import { useValue, useSetValue, useStore, getByPath, type ComponentProps } from "micro-render";
 import {
   closestCenter,
   DndContext,

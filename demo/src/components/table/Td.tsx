@@ -1,5 +1,5 @@
 // Td.tsx — HTML td element.
-import type { ComponentProps } from "mini-render";
+import type { ComponentProps } from "micro-render";
 
 export function Td({ children }: ComponentProps) {
   return (

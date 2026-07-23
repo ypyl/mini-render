@@ -1,6 +1,6 @@
 // ActionButton.tsx — emits an action on click.
 import { Button as MantineButton } from "@mantine/core";
-import type { ComponentProps } from "mini-render";
+import type { ComponentProps } from "micro-render";
 
 export function ActionButton({ element, emit }: ComponentProps) {
   return (

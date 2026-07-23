@@ -1,6 +1,6 @@
 // CaseContainer.tsx — demo case wrapper with title and description.
 import { Divider, Paper, Spoiler, Text, Title } from "@mantine/core";
-import type { ComponentProps } from "mini-render";
+import type { ComponentProps } from "micro-render";
 
 export function CaseContainer({ element, children }: ComponentProps) {
   return (

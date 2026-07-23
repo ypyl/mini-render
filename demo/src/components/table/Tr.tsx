@@ -1,5 +1,5 @@
 // Tr.tsx — HTML tr element.
-import type { ComponentProps } from "mini-render";
+import type { ComponentProps } from "micro-render";
 
 export function Tr({ children }: ComponentProps) {
   return <tr>{children}</tr>;

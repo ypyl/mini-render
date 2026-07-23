@@ -17,7 +17,7 @@ import { WatchValidationCase } from "./cases/watch-validation/WatchValidationCas
 
 export function App() {
   return (
-    <Router base="/mini-render">
+    <Router base="/micro-render">
       <Switch>
         <Route path="/" component={HomePage} />
         <Route path="/basic" component={BasicCase} />

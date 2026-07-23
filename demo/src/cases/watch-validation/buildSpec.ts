@@ -1,5 +1,5 @@
 // watch-validation/buildSpec.ts — Watch validation demo spec.
-import type { Spec } from "mini-render";
+import type { Spec } from "micro-render";
 
 export function buildWatchValidationSpec(): Spec {
   return {

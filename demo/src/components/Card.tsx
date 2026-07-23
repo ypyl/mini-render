@@ -1,6 +1,6 @@
 // Card.tsx — paper card with optional title.
 import { Paper, Title } from "@mantine/core";
-import type { ComponentProps } from "mini-render";
+import type { ComponentProps } from "micro-render";
 
 export function Card({ element, children }: ComponentProps) {
   return (

@@ -15,11 +15,11 @@ A binding component SHALL obtain its data path(s) from `element.props` (e.g. `pr
 - **THEN** the same `BoundField` component definition serves both, subscribing to the path each spec supplies
 
 ### Requirement: Presentational components receive plain props only
-Presentational components (e.g. `TextInput`, `Button`, `Card`) SHALL receive only plain props (`value`, `onChange`, `onClick`, `label`, `children`, etc.) and MUST NOT import the store hooks or know about paths. They SHALL be reusable outside the mini-render registry (e.g. used directly in a hand-written React tree).
+Presentational components (e.g. `TextInput`, `Button`, `Card`) SHALL receive only plain props (`value`, `onChange`, `onClick`, `label`, `children`, etc.) and MUST NOT import the store hooks or know about paths. They SHALL be reusable outside the micro-render registry (e.g. used directly in a hand-written React tree).
 
 #### Scenario: Presentational input reused outside the registry
 - **WHEN** a plain React file imports `TextInput` and renders `<TextInput value="x" onChange={fn} />` directly (without `Renderer`)
-- **THEN** it works with no mini-render store or context present
+- **THEN** it works with no micro-render store or context present
 
 ### Requirement: Binding forwards plain props to presentational components
 A binding component SHALL translate `element.props` paths into calls to `useBound`/`useValue`/`emit` and forward the resulting plain `value`/`onChange`/`onClick`/etc. to a presentational component. The binding layer is the ONLY place that touches the store hooks.

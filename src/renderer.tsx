@@ -57,7 +57,7 @@ const _ElementRenderer = memo(function ElementRenderer({
   if (!element) {
     if (!loading) {
       console.warn(
-        `mini-render: missing element "${elementKey}" referenced in spec.`,
+        `micro-render: missing element "${elementKey}" referenced in spec.`,
       );
     }
     return null;
@@ -99,7 +99,7 @@ const _ElementRenderer = memo(function ElementRenderer({
 
   // ── Render ──
   if (!Component) {
-    console.warn(`mini-render: no component registered for type "${element.type}"`);
+    console.warn(`micro-render: no component registered for type "${element.type}"`);
     return null;
   }
 
@@ -224,7 +224,7 @@ function useWatch(watch?: WatchMap) {
           const handler = actionCtx.handlers[b.action];
           if (!handler) {
             console.warn(
-              `mini-render: no handler registered for watch action "${b.action}"`,
+              `micro-render: no handler registered for watch action "${b.action}"`,
             );
             continue;
           }

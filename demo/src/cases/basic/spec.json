@@ -3,12 +3,12 @@
   "elements": {
     "card": {
       "type": "CaseContainer",
-      "props": { "title": "Basic Static Rendering", "description": "Static spec rendering — no state, no actions. The simplest possible Renderer usage.", "technicalDescription": "Spec\nCaseContainer → StaticText(\"Hello from mini-render!\")\nState\n{} — empty store, no mutations\nFeatures\n• Renderer — spec-driven component resolution via registry\n• ElementRenderer — memoized per-element rendering\n• Spec JSON — declarative layout without imperative JSX" },
+      "props": { "title": "Basic Static Rendering", "description": "Static spec rendering — no state, no actions. The simplest possible Renderer usage.", "technicalDescription": "Spec\nCaseContainer → StaticText(\"Hello from micro-render!\")\nState\n{} — empty store, no mutations\nFeatures\n• Renderer — spec-driven component resolution via registry\n• ElementRenderer — memoized per-element rendering\n• Spec JSON — declarative layout without imperative JSX" },
       "children": ["greeting"]
     },
     "greeting": {
       "type": "StaticText",
-      "props": { "text": "Hello from mini-render!" }
+      "props": { "text": "Hello from micro-render!" }
     }
   }
 }

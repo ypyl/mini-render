@@ -1,6 +1,6 @@
 // EditToggle.tsx — shows [Edit] in view mode, [Save] [Cancel] in edit mode.
 import { Button as MantineButton } from "@mantine/core";
-import { useValue, type ComponentProps } from "mini-render";
+import { useValue, type ComponentProps } from "micro-render";
 
 export function EditToggle({ emit }: ComponentProps) {
   const editing = useValue<boolean>("/editingSection");

@@ -1,7 +1,7 @@
 // ToggleField.tsx — Mantine Switch bound to a boolean store path.
 import { Switch } from "@mantine/core";
-import { useBound } from "mini-render";
-import type { ComponentProps } from "mini-render";
+import { useBound } from "micro-render";
+import type { ComponentProps } from "micro-render";
 
 export function ToggleField({ element }: ComponentProps) {
   const path = String(element.props?.bind ?? "");

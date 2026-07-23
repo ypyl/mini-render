@@ -1,7 +1,7 @@
 // SelectField.tsx — always-writable dropdown bound to a store path.
 import { Select } from "@mantine/core";
-import { useBound } from "mini-render";
-import type { ComponentProps } from "mini-render";
+import { useBound } from "micro-render";
+import type { ComponentProps } from "micro-render";
 
 interface Option {
   value: string;

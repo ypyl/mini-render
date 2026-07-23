@@ -1,5 +1,5 @@
 // large/handlers.ts — handlers for the large data demo.
-import type { Handlers } from "mini-render";
+import type { Handlers } from "micro-render";
 
 export const handlers: Handlers = {
   startEdit: (_params, { getState, setState }) => {

@@ -33,6 +33,6 @@ The `useItemPath(expr)` hook SHALL accept a value that is either a plain string 
 ### Requirement: useRepeatPath and useRepeatIndex are exported
 `useRepeatPath` and `useRepeatIndex` SHALL be exported from `src/index.ts` as public API. `useRepeatPath` is already exported; `useRepeatIndex` is new.
 
-#### Scenario: useRepeatIndex importable from mini-render
-- **WHEN** a consumer writes `import { useRepeatIndex } from "mini-render"`
+#### Scenario: useRepeatIndex importable from micro-render
+- **WHEN** a consumer writes `import { useRepeatIndex } from "micro-render"`
 - **THEN** it receives the hook function

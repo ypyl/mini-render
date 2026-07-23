@@ -2,8 +2,8 @@
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Container, Breadcrumbs, SimpleGrid } from "@mantine/core";
-import { Renderer, createStore } from "mini-render";
-import type { Store } from "mini-render";
+import { Renderer, createStore } from "micro-render";
+import type { Store } from "micro-render";
 import { createHandlers } from "./handlers";
 import { registry } from "./registry";
 import { buildSettingsSpec } from "./buildSettingsSpec";

@@ -1,5 +1,5 @@
 // dnd-table/buildSpec.ts — Drag & Drop table demo spec.
-import type { Spec } from "mini-render";
+import type { Spec } from "micro-render";
 
 export function buildDndTableSpec(): Spec {
   return {

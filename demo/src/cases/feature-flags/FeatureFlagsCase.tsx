@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Container, Breadcrumbs } from "@mantine/core";
-import { Renderer, createStore } from "mini-render";
+import { Renderer, createStore } from "micro-render";
 import { registry } from "./registry";
 import { buildDashboardSpec } from "./buildSpec";
 

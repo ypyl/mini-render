@@ -1,7 +1,7 @@
 // LoadingBox.tsx — wraps children in a relative Box with LoadingOverlay controlled by a store path.
 import { Box, LoadingOverlay } from "@mantine/core";
-import { useValue } from "mini-render";
-import type { ComponentProps } from "mini-render";
+import { useValue } from "micro-render";
+import type { ComponentProps } from "micro-render";
 
 export function LoadingBox({ element, children }: ComponentProps) {
   const loading = useValue<string>(String(element.props?.path ?? ""));

@@ -1,35 +1,35 @@
 ## ADDED Requirements
 
 ### Requirement: Demo builds with GitHub Pages base path
-The demo Vite config SHALL set `base` to `'/mini-render/'` so that all built asset paths are absolute and resolve correctly when served from `https://<user>.github.io/mini-render/`.
+The demo Vite config SHALL set `base` to `'/micro-render/'` so that all built asset paths are absolute and resolve correctly when served from `https://<user>.github.io/micro-render/`.
 
 #### Scenario: Built assets use absolute paths
 - **WHEN** the demo is built with `npm run build`
-- **THEN** `dist/index.html` contains `<script src="/mini-render/assets/...">` (absolute path with base prefix)
+- **THEN** `dist/index.html` contains `<script src="/micro-render/assets/...">` (absolute path with base prefix)
 - **AND** all CSS, JS, and image references use the base prefix
 
 #### Scenario: Local dev is unaffected
 - **WHEN** the dev server is started with `npm run dev`
 - **THEN** the demo loads at `http://localhost:5173/` with correct routing
-- **AND** no `/mini-render/` prefix is required in the URL
+- **AND** no `/micro-render/` prefix is required in the URL
 
 ### Requirement: wouter router strips the GitHub Pages base path
-The wouter `Router` component in `App.tsx` SHALL set `base` to `"/mini-render"` so that client-side routes match the path after the repository name prefix.
+The wouter `Router` component in `App.tsx` SHALL set `base` to `"/micro-render"` so that client-side routes match the path after the repository name prefix.
 
 #### Scenario: Route matching strips base prefix
-- **WHEN** the browser is at `https://<user>.github.io/mini-render/large`
+- **WHEN** the browser is at `https://<user>.github.io/micro-render/large`
 - **THEN** wouter matches the `/large` route and renders `LargeCase`
-- **AND** `Link` components generate correct hrefs under `/mini-render/`
+- **AND** `Link` components generate correct hrefs under `/micro-render/`
 
 #### Scenario: Root route works
-- **WHEN** the browser is at `https://<user>.github.io/mini-render/`
+- **WHEN** the browser is at `https://<user>.github.io/micro-render/`
 - **THEN** wouter matches the `/` route and renders `HomePage`
 
 ### Requirement: GitHub Pages serves SPA for unknown routes via 404.html
 The GitHub Actions deploy workflow SHALL copy `dist/index.html` to `dist/404.html` so that GitHub Pages serves the SPA for any route that doesn't correspond to a static file.
 
 #### Scenario: Direct navigation to a sub-route works
-- **WHEN** a user navigates directly to `https://<user>.github.io/mini-render/table`
+- **WHEN** a user navigates directly to `https://<user>.github.io/micro-render/table`
 - **THEN** the SPA boots and renders the Table case (not a 404 page)
 
 ### Requirement: GitHub Actions deploys demo to GitHub Pages on push to master

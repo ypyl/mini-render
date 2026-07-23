@@ -9,7 +9,7 @@ import { BoundField } from "../../components/BoundField";
 import { ActionButton } from "../../components/ActionButton";
 import { EditToggle } from "../../components/EditToggle";
 import { CaseContainer } from "../../components/CaseContainer";
-import type { Registry } from "mini-render";
+import type { Registry } from "micro-render";
 
 export const registry: Registry = {
   CaseContainer, Table, THead, TBody, Tr, Th, Td, BoundField, ActionButton, EditToggle,

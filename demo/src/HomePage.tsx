@@ -81,14 +81,14 @@ export function HomePage() {
   return (
     <Container size="lg" py="xl">
       <Title order={2} ta="center" mb="xs">
-        mini-render demo
+        micro-render demo
       </Title>
       <Text c="dimmed" ta="center" mb="xl" maw={600} mx="auto">
         A minimal spec-driven React UI renderer with granular per-path subscriptions.
         Each demo below is a self-contained example built from the same public API.
       </Text>
       <Anchor
-        href="https://github.com/ypyl/mini-render"
+        href="https://github.com/ypyl/micro-render"
         target="_blank"
         size="sm"
         ta="center"
