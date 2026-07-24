@@ -1,14 +1,14 @@
-# micro-render
+# thin-render
 
 A ~700-line spec-driven React renderer with **granular per-path re-renders**. Edit one cell in a 1000-row table — only that one cell's component re-renders.
 
 Built as a minimal alternative to `@json-render/react`, dropping AI streaming, Zod validation, directives, devtools, and multi-framework output. Just the rendering core, a path-based store, and an action system.
 
-**[Live demo →](https://ypyl.github.io/micro-render/)**
+**[Live demo →](https://ypyl.github.io/thin-render/)**
 
 ## Why
 
-`@json-render/react` cascades re-renders across the entire element tree on any state change because three React contexts (`State`, `Visibility`, `Actions`) all subscribe to the full state. Editing one cell in a repeated structure re-renders every component. micro-render fixes this at the architecture level: the renderer subscribes to nothing, and leaf components subscribe to individual store paths via `useSyncExternalStore`.
+`@json-render/react` cascades re-renders across the entire element tree on any state change because three React contexts (`State`, `Visibility`, `Actions`) all subscribe to the full state. Editing one cell in a repeated structure re-renders every component. thin-render fixes this at the architecture level: the renderer subscribes to nothing, and leaf components subscribe to individual store paths via `useSyncExternalStore`.
 
 ## Architecture
 
@@ -50,7 +50,7 @@ npm run dev     # http://localhost:5173
 ### Basic usage
 
 ```tsx
-import { Renderer, createStore, type Spec, type Registry } from "micro-render";
+import { Renderer, createStore, type Spec, type Registry } from "thin-render";
 
 // 1. Define a spec (what to render)
 const spec: Spec = {
@@ -79,7 +79,7 @@ const store = createStore({});
 Components use `useBound(path)` to read and write a single store path:
 
 ```tsx
-import { useBound } from "micro-render";
+import { useBound } from "thin-render";
 
 function BoundField({ element }: ComponentProps) {
   const [value, setValue] = useBound<string>(String(element.props?.bind));
@@ -140,7 +140,7 @@ Renders `row` once per item in `/items`. Inside a repeat, components can use:
 - `useRepeatIndex()` — get the numeric index (`0`, `1`, etc.)
 - `useItemPath(expr)` — resolve `{ $item: "field" }` to the full path
 
-For stable React keys across re-renders, provide a `key` field on the repeat config pointing to a unique field on each item (e.g., `"repeat": { "path": "/items", "key": "id" }`). Without it, the array index is used, which breaks on reorder or delete. The unique ID must come from your data — micro-render does not auto-generate IDs.
+For stable React keys across re-renders, provide a `key` field on the repeat config pointing to a unique field on each item (e.g., `"repeat": { "path": "/items", "key": "id" }`). Without it, the array index is used, which breaks on reorder or delete. The unique ID must come from your data — thin-render does not auto-generate IDs.
 
 ### Watch (reactive derivations)
 
@@ -235,7 +235,7 @@ The demo app (`demo/`) has twelve self-contained cases:
 
 ## vs json-render
 
-| | json-render | micro-render |
+| | json-render | thin-render |
 |---|-------------|-------------|
 | Re-render scope on cell edit | Full tree (context cascade) | One component |
 | AI streaming (JSONL patches) | ✓ | ✗ |

@@ -1,5 +1,5 @@
 // detail-modal/buildSpec.ts — builds the detail modal demo spec.
-import type { Spec } from "micro-render";
+import type { Spec } from "thin-render";
 
 interface Item {
   id: string;

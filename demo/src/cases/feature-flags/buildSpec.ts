@@ -1,5 +1,5 @@
 // feature-flags/buildSpec.ts — Feature Flags Dashboard spec.
-import type { Spec } from "micro-render";
+import type { Spec } from "thin-render";
 
 export function buildDashboardSpec(): Spec {
   return {

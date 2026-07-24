@@ -1,7 +1,7 @@
 // SortableRow.tsx — draggable table row using @dnd-kit useSortable.
-// Called directly by DndTable, not via micro-render registry.
+// Called directly by DndTable, not via thin-render registry.
 import { useCallback } from "react";
-import { useValue, useSetValue } from "micro-render";
+import { useValue, useSetValue } from "thin-render";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { IconGripVertical } from "@tabler/icons-react";

@@ -1,5 +1,5 @@
 // table/handlers.ts — handlers for the table demo.
-import type { Handlers } from "micro-render";
+import type { Handlers } from "thin-render";
 
 export const handlers: Handlers = {
   startEdit: (_params, { getState, setState }) => {

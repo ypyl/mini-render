@@ -35,7 +35,7 @@ Test files SHALL import functions under test from their source modules rather th
 
 #### Scenario: Action tests import from source
 - **WHEN** `src/actions.test.ts` is compiled and run
-- **THEN** it imports `resolveParams` from `micro-render` (or `./hooks`)
+- **THEN** it imports `resolveParams` from `thin-render` (or `./hooks`)
 - **AND** it imports `getByPath`, `createStore` from `./store`
 - **AND** no store logic is duplicated in the test file
 
@@ -43,7 +43,7 @@ Test files SHALL import functions under test from their source modules rather th
 The `resolveParams` function SHALL be exported from the library barrel (`src/index.ts`) so it can be imported and tested directly, and used by consumers writing custom action handlers.
 
 #### Scenario: resolveParams is importable
-- **WHEN** a consumer imports `resolveParams` from `"micro-render"`
+- **WHEN** a consumer imports `resolveParams` from `"thin-render"`
 - **THEN** the import resolves to the function defined in `src/hooks.ts`
 
 ### Requirement: Coverage thresholds are enforced

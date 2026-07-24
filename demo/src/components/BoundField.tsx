@@ -1,6 +1,6 @@
 // BoundField.tsx — editable field bound to a store path.
 import { Box, TextInput as MantineTextInput } from "@mantine/core";
-import { useBound, useValue, useRepeatPath, type ComponentProps } from "micro-render";
+import { useBound, useValue, useRepeatPath, type ComponentProps } from "thin-render";
 
 export function BoundField({ element }: ComponentProps) {
   const base = useRepeatPath();

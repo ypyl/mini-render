@@ -11,7 +11,7 @@ import { ActionButton } from "../../components/ActionButton";
 import { Modal } from "../../components/Modal";
 import { LoadingBox } from "../../components/LoadingBox";
 import { StackRow } from "../../components/StackRow";
-import type { Registry } from "micro-render";
+import type { Registry } from "thin-render";
 
 export const registry: Registry = {
   CaseContainer, Table, THead, TBody, Tr, Th, Td, BoundField, ActionButton, Modal, LoadingBox, StackRow,

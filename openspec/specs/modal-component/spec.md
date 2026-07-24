@@ -51,4 +51,4 @@ The home page CASES array SHALL include an entry for the detail modal demo with 
 #### Scenario: Detail modal card on home page
 - **WHEN** viewing the home page
 - **THEN** a card for "Detail Modal" is present
-- **AND** its description names the micro-render concepts demonstrated (interdependent state, async handlers, Modal component)
+- **AND** its description names the thin-render concepts demonstrated (interdependent state, async handlers, Modal component)

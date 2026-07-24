@@ -1,5 +1,5 @@
 {
-  "name": "micro-render",
+  "name": "thin-render",
   "version": "0.2.1",
   "description": "Minimal spec-driven React UI renderer with granular per-path subscriptions.",
   "type": "module",
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ypyl/micro-render.git"
+    "url": "git+https://github.com/ypyl/thin-render.git"
   },
   "keywords": [
     "react",

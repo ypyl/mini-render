@@ -1,7 +1,7 @@
 // SliderField.tsx — Mantine Slider bound to a numeric store path.
 import { Slider, Text } from "@mantine/core";
-import { useBound } from "micro-render";
-import type { ComponentProps } from "micro-render";
+import { useBound } from "thin-render";
+import type { ComponentProps } from "thin-render";
 
 export function SliderField({ element }: ComponentProps) {
   const path = String(element.props?.bind ?? "");

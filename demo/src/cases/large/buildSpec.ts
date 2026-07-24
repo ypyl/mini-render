@@ -1,5 +1,5 @@
 // large/buildSpec.ts — builds the 1000-row repeated cards spec.
-import type { Spec } from "micro-render";
+import type { Spec } from "thin-render";
 
 export function buildLargeSpec(itemCount: number): Spec {
   return {

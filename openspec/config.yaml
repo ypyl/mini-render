@@ -1,12 +1,12 @@
 schema: spec-driven
 
 context: |
-  **Project:** micro-render — a minimal spec-driven React UI renderer with granular per-path subscriptions.
+  **Project:** thin-render — a minimal spec-driven React UI renderer with granular per-path subscriptions.
   **Tech stack:** TypeScript, React 19, Vitest, Mantine v9 (demo), Vite (demo).
   **Library:** Pure logic in src/ (store, hooks, renderer, contexts). Demo app in demo/.
   **Testing:** 100% coverage enforced (vitest config `thresholds: { lines: 100, branches: 100, functions: 100, statements: 100 }`).
   **Conventions:** Use SHALL/MUST for spec requirements. Every requirement needs at least one `#### Scenario:` block. Demo components in `demo/src/components/` should be reusable/universal not single-use. Follow existing patterns before inventing new ones.
-  **Publishing:** npm package `micro-render`. Tag-triggered publish workflow via GitHub Actions. Do not change the package name without discussion.
+  **Publishing:** npm package `thin-render`. Tag-triggered publish workflow via GitHub Actions. Do not change the package name without discussion.
 
 rules:
   proposal:

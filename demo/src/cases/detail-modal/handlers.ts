@@ -1,6 +1,6 @@
 // detail-modal/handlers.ts — async loadDetail + closeModal.
-import type { Handlers } from "micro-render";
-import { getByPath } from "micro-render";
+import type { Handlers } from "thin-render";
+import { getByPath } from "thin-render";
 
 const DETAILS: Record<string, { revenue: string; employees: number; founded: number; headquarters: string }> = {
   a1: { revenue: "$1.2M", employees: 42, founded: 2019, headquarters: "San Francisco" },

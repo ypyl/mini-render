@@ -156,7 +156,7 @@ export function useEmit(on?: OnMap): (event: string) => Promise<void> | void {
         const handler = ctx.handlers[b.action];
         if (!handler) {
           if (b.action !== "setState") {
-            console.warn(`micro-render: no handler registered for "${b.action}"`);
+            console.warn(`thin-render: no handler registered for "${b.action}"`);
           }
           continue;
         }

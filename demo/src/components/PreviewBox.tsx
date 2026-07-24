@@ -1,7 +1,7 @@
 // PreviewBox.tsx — renders a styled Paper from /preview store paths.
 import { Paper } from "@mantine/core";
-import { useValue } from "micro-render";
-import type { ComponentProps } from "micro-render";
+import { useValue } from "thin-render";
+import type { ComponentProps } from "thin-render";
 
 export function PreviewBox({}: ComponentProps) {
   const title = useValue<string>("/preview/title") ?? "Preview";

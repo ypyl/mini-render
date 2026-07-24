@@ -1,6 +1,6 @@
 // Switch.tsx — renders the child element whose key matches the value at props.path.
-import { useValue } from "micro-render";
-import type { ComponentProps } from "micro-render";
+import { useValue } from "thin-render";
+import type { ComponentProps } from "thin-render";
 import { Children, type ReactElement } from "react";
 
 export function Switch({ element, children }: ComponentProps) {

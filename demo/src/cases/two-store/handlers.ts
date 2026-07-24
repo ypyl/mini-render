@@ -1,6 +1,6 @@
 // two-store/handlers.ts — cross-store handler for the two-store demo.
-import type { Handlers } from "micro-render";
-import type { Store } from "micro-render";
+import type { Handlers } from "thin-render";
+import type { Store } from "thin-render";
 
 export function createHandlers(storeB: Store): Handlers {
   return {

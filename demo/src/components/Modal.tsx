@@ -1,7 +1,7 @@
 // Modal.tsx — renders Mantine Modal when store path is truthy.
 import { Modal as MantineModal } from "@mantine/core";
-import { useValue, useSetValue } from "micro-render";
-import type { ComponentProps } from "micro-render";
+import { useValue, useSetValue } from "thin-render";
+import type { ComponentProps } from "thin-render";
 
 export function Modal({ element, children }: ComponentProps) {
   const path = String(element.props?.path ?? "");

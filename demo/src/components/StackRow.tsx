@@ -1,6 +1,6 @@
 // StackRow.tsx — repeat wrapper with Mantine Stack gap between children.
 import { Stack } from "@mantine/core";
-import type { ComponentProps } from "micro-render";
+import type { ComponentProps } from "thin-render";
 
 export function StackRow({ element, children }: ComponentProps) {
   const gap = (element.props?.gap as string | number) ?? "md";

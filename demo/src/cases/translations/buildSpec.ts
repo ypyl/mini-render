@@ -1,5 +1,5 @@
 // translations/buildSpec.ts — Translations editor using object repeat.
-import type { Spec } from "micro-render";
+import type { Spec } from "thin-render";
 
 export function buildTranslationsSpec(): Spec {
   return {

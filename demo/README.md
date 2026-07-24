@@ -1,13 +1,13 @@
-# micro-render demo
+# thin-render demo
 
-Demonstrates the `micro-render` library — a minimal spec-driven React renderer with
+Demonstrates the `thin-render` library — a minimal spec-driven React renderer with
 **granular per-path re-renders**. Editing one cell in a 1000-row table re-renders
 only that one cell.
 
 ## Running
 
 ```bash
-cd micro-render/demo
+cd thin-render/demo
 npm install    # first time
 npm run dev    # starts at http://localhost:5173
 ```

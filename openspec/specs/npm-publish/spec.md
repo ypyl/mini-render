@@ -21,7 +21,7 @@ The project SHALL have a `tsconfig.build.json` that extends `tsconfig.json`, rem
 The `package.json` SHALL include `exports`, `main`, `module`, and `types` fields pointing into `dist/`. The `exports` field SHALL map `"."` to the ESM entry with a `types` condition for TypeScript. The `files` field SHALL be set to `["dist"]` to limit the published tarball.
 
 #### Scenario: ESM import resolves to compiled output
-- **WHEN** a consumer runs `import { createStore } from "micro-render"`
+- **WHEN** a consumer runs `import { createStore } from "thin-render"`
 - **THEN** Node.js (or bundler) resolves to `dist/index.js`
 - **AND** TypeScript resolves types from `dist/index.d.ts`
 

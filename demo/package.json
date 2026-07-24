@@ -1,5 +1,5 @@
 {
-  "name": "micro-render-demo",
+  "name": "thin-render-demo",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -15,7 +15,7 @@
     "@mantine/core": "^9.2.1",
     "@mantine/hooks": "^9.2.1",
     "@tabler/icons-react": "^3.45.0",
-    "micro-render": "file:..",
+    "thin-render": "file:..",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "wouter": "^3.10.0"

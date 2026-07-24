@@ -1,5 +1,5 @@
 // actions/handlers.ts — handlers for the action dispatch demo.
-import type { Handlers } from "micro-render";
+import type { Handlers } from "thin-render";
 
 export const handlers: Handlers = {
   saveDoc: (_params, { setState }) => {

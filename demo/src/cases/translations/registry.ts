@@ -4,7 +4,7 @@ import { PathLabel } from "../../components/PathLabel";
 import { BoundField } from "../../components/BoundField";
 import { FieldsetRow } from "../../components/FieldsetRow";
 import { StackRow } from "../../components/StackRow";
-import type { Registry } from "micro-render";
+import type { Registry } from "thin-render";
 
 export const registry: Registry = {
   CaseContainer, PathLabel, BoundField, FieldsetRow, StackRow,

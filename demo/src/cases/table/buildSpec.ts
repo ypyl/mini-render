@@ -1,5 +1,5 @@
 // table/buildSpec.ts — builds the HTML table spec with repeat.
-import type { Spec } from "micro-render";
+import type { Spec } from "thin-render";
 
 export function buildTableSpec(itemCount: number): Spec {
   return {

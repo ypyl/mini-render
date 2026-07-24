@@ -6,6 +6,6 @@ import { BoundField } from "../../components/BoundField";
 import { StaticText } from "../../components/StaticText";
 import { Switch } from "../../components/Switch";
 import { ButtonGroup } from "../../components/ButtonGroup";
-import type { Registry } from "micro-render";
+import type { Registry } from "thin-render";
 
 export const registry: Registry = { CaseContainer, Card, ActionButton, BoundField, StaticText, Switch, ButtonGroup };
