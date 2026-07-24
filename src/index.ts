@@ -11,6 +11,7 @@ export {
   immutableSetByPath,
   createStore,
   type Store,
+  type StoreOptions,
   type Listener,
 } from "./store";
 export {

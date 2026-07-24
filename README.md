@@ -247,6 +247,4 @@ The demo app (`demo/`) has twelve self-contained cases:
 | Runtime deps | React + Zod | React only |
 | LOC (core) | ~3,000 | ~700 |
 
-## Roadmap
 
-- [ ] **`$computed` / `useComputed`** — pure display-only derivations (e.g. `fullName = firstName + " " + lastName`) without writing to the store. A `useComputed(expr)` hook resolves `{ $computed: "fn", args: { ... } }` expressions at render time, following the same pattern as `useItemPath` for `$item`. Components call the hook; the renderer stays expression-free. See [json-render computed values](https://json-render.dev/docs/computed-values) for reference.

@@ -108,10 +108,22 @@ export interface Store {
   getState: () => unknown;
 }
 
+/** Options for {@link createStore}. */
+export interface StoreOptions {
+  /** Log every `set()` call to the console. */
+  debug?: boolean;
+  /** Custom logger. Defaults to `console.log`. */
+  log?: (...args: unknown[]) => void;
+}
+
 /** Create an in-memory store with per-path subscriptions. */
-export function createStore(initial: Record<string, unknown> = {}): Store {
+export function createStore(
+  initial: Record<string, unknown> = {},
+  options: StoreOptions = {},
+): Store {
   let state: unknown = { ...initial };
   const listeners = new Map<string, Set<Listener>>();
+  const { debug = false, log = console.log } = options;
 
   function notify(affected: string) {
     for (const [subscribedPath, set] of listeners) {
@@ -127,7 +139,9 @@ export function createStore(initial: Record<string, unknown> = {}): Store {
     },
 
     set(path: string, value: unknown) {
-      if (getByPath(state, path) === value) return;
+      const prev = getByPath(state, path);
+      if (prev === value) return;
+      if (debug) log(`[store] ${path}:`, prev, "→", value);
       state = immutableSetByPath(state, path, value);
       notify(path);
     },
