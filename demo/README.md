@@ -28,6 +28,7 @@ npm run dev    # starts at http://localhost:5173
 | **Translations** | Editable translation strings via `repeat` on a plain object (not an array). |
 | **Drag & Drop** | Sortable table with drag-and-drop reordering, add, remove, and edit/save/cancel. Powered by `@dnd-kit`. |
 | **Watch Validation** | Live validation as you type — the `watch` directive triggers a handler on store change without re-rendering the element. |
+| **Mantine Table** | Mantine-styled table with `<Table>` + `<Pagination>` — 300 rows, 10 per page. Pagination state driven by store. |
 
 ## Performance verification
 

@@ -75,6 +75,12 @@ const CASES = [
     title: "Watch Validation",
     description: "Live validation as you type — the watch directive fires a handler on every store change without re-rendering.",
   },
+  {
+    route: "/mantine-table",
+    emoji: "📑",
+    title: "Mantine Table",
+    description: "Mantine-styled table with pagination — 300 rows, 10 per page. Pagination state lives in the store.",
+  },
 ];
 
 export function HomePage() {

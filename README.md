@@ -216,7 +216,7 @@ npm test   # 31 pure-logic tests (store + actions), zero framework deps
 
 ## Demo
 
-The demo app (`demo/`) has twelve self-contained cases:
+The demo app (`demo/`) has thirteen self-contained cases:
 
 | Case | What it shows |
 |-----|---------------|
@@ -232,6 +232,7 @@ The demo app (`demo/`) has twelve self-contained cases:
 | **Translations** | Editable translation strings via repeat on a plain object — demonstrates object key iteration with PathLabel and BoundField |
 | **Drag & Drop** | Sortable table with drag-and-drop reordering, add, and remove — powered by @dnd-kit with the store as source of truth |
 | **Watch Validation** | Live validation as you type — the watch directive triggers a handler on store change without re-rendering |
+| **Mantine Table** | Mantine-styled table with pagination — 300 rows, 10 per page, page state in store. Self-contained PaginatedTable component |
 
 ## vs json-render
 
