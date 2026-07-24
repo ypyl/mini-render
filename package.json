@@ -1,6 +1,6 @@
 {
   "name": "thin-render",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Minimal spec-driven React UI renderer with granular per-path subscriptions.",
   "type": "module",
   "main": "./dist/index.js",
